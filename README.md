@@ -58,3 +58,9 @@ erase an event from calendar
 
 12. list all events
 show what concerts are coming towards us
+
+## Domain Information Model
+![Domain_Information_Model](https://github.com/krausma-4/WebApp2020/blob/master/DIM.png)
+
+## Information Design Model
+![Information_Design_Model](https://github.com/krausma-4/WebApp2020/blob/master/Information_Design_Model.png)
