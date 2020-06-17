@@ -42,7 +42,7 @@ class Event {
 
 
     // load all Events from the firebase database
-    Event.retriveAll = async function(){
+    Event.retrieveAll = async function(){
         try {
            return (await db.collection("Event").get()).docs.map(d => d.data);
         } catch (error){
@@ -53,7 +53,7 @@ class Event {
 
 
     // load a specifc Event from the firebase database
-    Event.retrive = async function(eventID){
+    Event.retrieve = async function(eventID){
         try {
             return (await db.collection("Event").doc(eventID).get()).data();
         } catch (error){
@@ -76,7 +76,7 @@ class Event {
     }
 
     //delete an Event in the database
-    Event.delete = async function(eventID){
+    Event.destroy = async function(eventID){
         await db.collection("Event").doc(eventID).delete();
         console.log("Successfuly deleted an Event with id " + eventID);
     }
