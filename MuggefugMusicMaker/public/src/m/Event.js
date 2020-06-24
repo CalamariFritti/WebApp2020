@@ -44,7 +44,12 @@ class Event {
     // load all Events from the firebase database
     Event.retrieveAll = async function(){
         try {
-           return (await db.collection("Event").get()).docs.map(d => d.data);
+        let collectEvents = db.collection("Event"),
+            queryEvents = await  collectEvents.get(),
+            documentEvents = queryEvents.docs,
+            eventRecord = documentEvents.map(d => d.data());
+        console.log(collectEvents);
+        return eventRecord;
         } catch (error){
             console.log("Error retriving all Events: $(error) ");
         }
@@ -55,7 +60,13 @@ class Event {
     // load a specifc Event from the firebase database
     Event.retrieve = async function(eventID){
         try {
-            return (await db.collection("Event").doc(eventID).get()).data();
+            let collectEvents = db.collection("Event"),
+                specificEvent =collectEvents.doc(eventID),
+                queryEvent = await specificEvent.get(),
+                eventRecord = queryEvent.data();
+            console.log("Event with the id" + eventID + "successfuly retrieved");
+            return eventRecord;
+
         } catch (error){
             console.log("Error retriving a Event: " + error);
         }

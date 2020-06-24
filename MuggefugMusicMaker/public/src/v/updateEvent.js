@@ -6,7 +6,7 @@ Methodes for updating Events
 
 mmm.v.updateEvent = {
     setupUserInterface: async function () {
-        const formEl = document.forms['Event'],
+        const formEl = document.forms['Event'];
             updateButton = formEl.commit,
             selectEventEl = formEl.selectEvent;
         // load all events
@@ -20,8 +20,9 @@ mmm.v.updateEvent = {
         // when a event is selected, fill the form with its data
         selectEventEl.addEventListener("change", async function () {
             const eventID = selectEventEl.value;
+            console.log("Selected Event has ID : "+ eventID);
             if (eventID) {
-                // retrieve up-to-date book record
+                // retrieve up-to-date event
                 const event = await Event.retrieve( eventID);
                 formEl.eventID.value = event.eventID;
                 formEl.name.value = event.name;
