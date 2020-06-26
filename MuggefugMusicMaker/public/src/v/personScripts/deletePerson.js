@@ -27,7 +27,7 @@ mmm.v.deletePerson = {
         const selectPersonEl = document.forms['Person'].selectPerson;
         const personID = selectPersonEl.value;
         if (personID) {
-            await Event.destroy( personID);
+            await Person.destroy( personID);
             // remove deleted Person from select options
             selectPersonEl.remove( selectPersonEl.selectedIndex);
 

@@ -1,18 +1,18 @@
 class Person {
-constructor(personID, name) {
+constructor({personID, name}) {
     this.personID = personID;
     this.name = name;
     //Maybe add an Enum for the role in the band eg. Singer or Drummer
-}
+    }
     /*######################################################
     Getter/Setter
     ####################################################### */
 
-    get personID{
+    get personID(){
         return this._personID;
     }
 
-    get name{
+    get name(){
         return this._name;
     }
 
@@ -33,7 +33,12 @@ constructor(personID, name) {
 // load all Person from the firebase database
 Person.retrieveAll = async function(){
     try {
-        return (await db.collection("Person").get()).docs.map(d => d.data);
+        let collectPerson = db.collection("Person"),
+            queryPerson = await  collectPerson.get(),
+            documentPerson = queryPerson.docs,
+            personRecord = documentPerson.map(d => d.data());
+        console.log(collectPerson);
+        return personRecord;
     } catch (error){
         console.log("Error retrieving all Person: $(error) ");
     }
@@ -65,7 +70,7 @@ Person.update = async function(slots){
 };
 
 //delete a person in the database
-Artist.delete = async function(personID){
+Person.delete = async function(personID){
     await db.collection("Person").doc(personID).delete();
     console.log("Successfuly deleted a Person with id " + personID);
 };

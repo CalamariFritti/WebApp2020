@@ -23,7 +23,7 @@ mmm.v.updatePerson = {
             console.log("Selected Person has ID : "+ personID);
             if (personID) {
                 // retrieve up-to-date person
-                const person = await Event.retrieve( personID);
+                const person = await Person.retrieve( personID);
                 formEl.personID.value = person.personID;
                 formEl.name.value = person.name;
             } else {
