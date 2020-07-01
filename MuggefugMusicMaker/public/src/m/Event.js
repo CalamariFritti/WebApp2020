@@ -74,15 +74,15 @@ class Event {
     }
     // add an Event to the database
     Event.add = async function(slots){
-        await db.collection("Event").doc(slots.eventID).set(slots);
+        await db.collection("Event").doc(slots.artistID).set(slots);
         console.log("Successfuly added an Event named " + slots.name);
     }
 
     // update an Event in the database
     Event.update = async function(slots){
         if (Object.keys( slots).length > 0) {
-            await db.collection("Event").doc(slots.eventID).update(slots);
-            console.log("Event" + slots.eventID +  "modified.");
+            await db.collection("Event").doc(slots.artistID).update(slots);
+            console.log("Event" + slots.artistID +  "modified.");
         }
     }
 

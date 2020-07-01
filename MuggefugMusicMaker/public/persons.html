@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>App: Manage Events</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- Firebase SDK snippet -->
+    <script src="/__/firebase/7.14.5/firebase-app.js"></script>
+    <script src="/__/firebase/7.14.5/firebase-firestore.js"></script>
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+    <link rel="stylesheet" href="css/normalize.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <script src="lib/browserShims.js"></script>
+    <script src="lib/util.js"></script>
+    <script src="lib/util-module.js"></script>
+    <script src="lib/util_OLD.js"></script>
+    <script src="lib/errorTypes.js"></script>
+    <script src="lib/Enumeration.js"></script>
+    <script src="src/m/Person.js"></script>
+    <script src="src/m/Artist.js"></script>
+    <script src="src/c/initialize.js"></script>
+    <script src="src/v/personScripts/persons.js"></script>
+    <script src="src/v/personScripts/createPerson.js"></script>
+    <script src="src/v/personScripts/deletePerson.js"></script>
+    <script src="src/v/personScripts/updatePerson.js"></script>
+    <script src="src/v/personScripts/retrieveAndListAllPerson.js"></script>
+    <script>
+        window.addEventListener("load", mmm.v.persons.setupUserInterface);
+    </script>
+</head>
+<body>
+<header>
+    <div class="wrapper clearfix">
+        <div class="title">
+            <h1>Muggefug Music Maker</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="artists.html">Bands</a></li>
+                <li><a href="persons.html">Persons</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="wrapper clearfix">
+        <!-- ======================================================= -->
+        <section id="Person-M" class="UI-Page">
+            <!-- ======================================================= -->
+            <h1>Manage person data</h1>
+            <ul class="menu">
+                <li><button type="button" onclick="mmm.v.retrieveAndListAllPerson.setupUserInterface()">Retrieve and list all person records</button></li>
+                <li><button type="button" onclick="mmm.v.createPerson.setupUserInterface()">Create a new person record</button></li>
+                <li><button type="button" onclick="mmm.v.updatePerson.setupUserInterface()">Update a person record</button></li>
+                <li><button type="button" onclick="mmm.v.deletePerson.setupUserInterface()">Delete a person record</button></li>
+            </ul>
+            <div class="button"><a href="index.html">Back to Main menu</a></div>
+        </section>
+        <!-- ======================================================= -->
+        <section id="Person-R" class="UI-Page">
+            <!-- ======================================================= -->
+            <h1>Retrieve and list all Persons</h1>
+            <table id="persons">
+                <thead>
+                <tr>
+                    <th>PersonID</th>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="button">
+                <button type="button" onclick="mmm.v.persons.refreshUI()">Back to menu</button>
+            </div>
+        </section>
+        <!-- ======================================================= -->
+        <section id="Person-C" class="UI-Page">
+            <!-- ======================================================= -->
+            <h1>Create a new Person record</h1>
+            <form id="createPerson">
+                <div class="field"><label>PersonID: <input name="personID"/></label></div>
+                <div class="field"><label>Name: <input name="name"/></label></div>
+                <div class="button-group">
+                    <button name="commit" type="button">Save</button>
+                    <button type="button" onclick="mmm.v.persons.refreshUI()">Back to menu</button>
+                </div>
+            </form>
+        </section>
+        <!-- ======================================================= -->
+        <section id="Person-U" class="UI-Page">
+            <!-- ======================================================= -->
+            <h1>Update a Person record</h1>
+
+            <form id="updatePerson">
+                <div>
+                    <label>Select Person:
+                        <select name="selectPerson">
+                            <option value=""> ---</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="field"><label>Person ID <output name="personID"/> </label></div>
+                <div class="field"><label>Name: <input type="text" name="name"/></label></div>
+                <div class="button-group">
+                    <button name="commit" type="button">Save Changes</button>
+                    <button type="button" onclick="mmm.v.persons.refreshUI()">Back to menu</button>
+                </div>
+            </form>
+
+        </section>
+        <!-- ======================================================= -->
+        <section id="Person-D" class="UI-Page">
+            <!-- ======================================================= -->
+            <h1>Delete a Person record</h1>
+            <form id="deletePerson">
+                <div>
+                    <div class="select-one">
+                        <label>Select Person:
+                            <select name="selectPerson">
+                                <option value=""> ---</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button name="commit" type="button">Delete</button>
+                    <button type="button" onclick="mmm.v.persons.refreshUI()">Back to menu</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>

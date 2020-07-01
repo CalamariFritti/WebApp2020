@@ -6,7 +6,7 @@ Methodes for updating Events
 
 mmm.v.updateEvent = {
     setupUserInterface: async function () {
-        const formEl = document.forms['Event'];
+        const formEl = document.forms['updateEvent'];
             updateButton = formEl.commit,
             selectEventEl = formEl.selectEvent;
         // load all events
@@ -14,7 +14,7 @@ mmm.v.updateEvent = {
         for (let e of events) {
             let optionEl = document.createElement("option");
             optionEl.text = e.name;
-            optionEl.value = e.eventID;
+            optionEl.value = e.artistID;
             selectEventEl.add( optionEl, null);
         }
         // when a event is selected, fill the form with its data
@@ -24,7 +24,7 @@ mmm.v.updateEvent = {
             if (eventID) {
                 // retrieve up-to-date event
                 const event = await Event.retrieve( eventID);
-                formEl.eventID.value = event.eventID;
+                formEl.artistID.value = event.artistID;
                 formEl.name.value = event.name;
                 formEl.eventDate.value = event.eventDate;
             } else {
@@ -38,19 +38,22 @@ mmm.v.updateEvent = {
         formEl.addEventListener("submit", function (e) {
             e.preventDefault();
         });
+
+        document.getElementById("Event-M").style.display = "none";
+        document.getElementById("Event-U").style.display = "block";
     },
     // save data
     handleSaveButtonClickEvent: async function () {
-        const formEl = document.forms['Event'],
+        const formEl = document.forms['updateEvent'],
             selectEventEl = formEl.selectEvent;
         const slots = {
-            eventID: formEl.eventID.value,
+            artistID: formEl.artistID.value,
             name: formEl.name.value,
             eventDate: parseInt( formEl.eventDate.value)
         };
         await Event.update(slots);
         // update the selection list option element
-        selectEventEl.options[selectEventEl.selectedIndex].text = slots.title;
+        selectEventEl.options[selectEventEl.selectedIndex].text = slots.name;
         formEl.reset();
     }
 };

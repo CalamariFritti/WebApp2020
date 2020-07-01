@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>App: Manage Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Firebase SDK snippet -->
+  <script src="/__/firebase/7.14.5/firebase-app.js"></script>
+  <script src="/__/firebase/7.14.5/firebase-firestore.js"></script>
+  <!-- Initialize Firebase -->
+  <script src="/__/firebase/init.js"></script>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
+  <link rel="stylesheet" href="css/main.css"/>
+
+  <script src="lib/browserShims.js"></script>
+  <script src="lib/util.js"></script>
+  <script src="lib/util-module.js"></script>
+  <script src="lib/util_OLD.js"></script>
+  <script src="lib/errorTypes.js"></script>
+  <script src="lib/Enumeration.js"></script>
+  <script src="src/m/Event.js"></script>
+  <script src="src/m/Artist.js"></script>
+  <script src="src/c/initialize.js"></script>
+  <script src="src/v/eventScripts/events.js"></script>
+  <script src="src/v/eventScripts/createEvent.js"></script>
+  <script src="src/v/eventScripts/deleteEvent.js"></script>
+  <script src="src/v/eventScripts/updateEvent.js"></script>
+  <script src="src/v/eventScripts/retrieveAndListAllEvents.js"></script>
+  <script>
+    window.addEventListener("load", mmm.v.events.setupUserInterface);
+  </script>
+</head>
+<body>
+<header>
+  <div class="wrapper clearfix">
+    <div class="title">
+      <h1>Muggefug Music Maker</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="artists.html">Bands</a></li>
+        <li><a href="persons.html">Persons</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrapper clearfix">
+<!-- ======================================================= -->
+  <section id="Event-M" class="UI-Page">
+<!-- ======================================================= -->
+    <h1>Manage event data</h1>
+    <ul class="menu">
+      <li><button type="button" onclick="mmm.v.retrieveAndListAllEvents.setupUserInterface()">Retrieve and list all event records</button></li>
+      <li><button type="button" onclick="mmm.v.createEvent.setupUserInterface()">Create a new event record</button></li>
+      <li><button type="button" onclick="mmm.v.updateEvent.setupUserInterface()">Update a event record</button></li>
+      <li><button type="button" onclick="mmm.v.deleteEvent.setupUserInterface()">Delete a event record</button></li>
+    </ul>
+    <div class="button"><a href="index.html">Back to Main menu</a></div>
+  </section>
+<!-- ======================================================= -->
+  <section id="Event-R" class="UI-Page">
+<!-- ======================================================= -->
+    <h1>Retrieve and list all Events</h1>
+    <table id="events">
+      <thead>
+      <tr>
+        <th>EventID</th>
+        <th>Name</th>
+        <th>Event Date</th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="button">
+      <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
+    </div>
+  </section>
+<!-- ======================================================= -->
+  <section id="Event-C" class="UI-Page">
+<!-- ======================================================= -->
+    <h1>Create a new Event record</h1>
+      <form id="createEvent">
+        <div class="field"><label>EventID: <input name="eventID"/></label></div>
+        <div class="field"><label>Name: <input name="name"/></label></div>
+        <div class="field"><label>Event Date: <input name="eventDate"/></label></div>
+        <div class="button-group">
+          <button name="commit" type="button">Save</button>
+          <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
+        </div>
+    </form>
+  </section>
+<!-- ======================================================= -->
+  <section id="Event-U" class="UI-Page">
+<!-- ======================================================= -->
+    <h1>Update a Event record</h1>
+
+      <form id="updateEvent">
+        <div>
+          <label>Select Event:
+            <select name="selectEvent">
+              <option value=""> ---</option>
+            </select>
+          </label>
+        </div>
+        <div class="field"><label>Event ID <output name="eventID"/> </label></div>
+        <div class="field"><label>Name: <input type="text" name="name"/></label></div>
+        <div class="field"><label>Event Date: <input name="eventDate"/></label></div>
+        <div class="button-group">
+          <button name="commit" type="button">Save Changes</button>
+          <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
+        </div>
+      </form>
+
+  </section>
+<!-- ======================================================= -->
+  <section id="Event-D" class="UI-Page">
+<!-- ======================================================= -->
+    <h1>Delete a Event record</h1>
+    <form id="deleteEvent">
+      <div>
+        <div class="select-one">
+        <label>Select Event:
+          <select name="selectEvent">
+            <option value=""> ---</option>
+          </select>
+        </label>
+        </div>
+      </div>
+      <div class="button-group">
+        <button name="commit" type="button">Delete</button>
+        <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
+      </div>
+    </form>
+  </section>
+  </div>
+</main>
+</body>
+</html>

@@ -6,7 +6,7 @@ Methodes for updating Persons
 
 mmm.v.updatePerson = {
     setupUserInterface: async function () {
-        const formEl = document.forms['Person'];
+        const formEl = document.forms['updatePerson'];
         updateButton = formEl.commit,
             selectPersonEl = formEl.selectPerson;
         // load all Persons
@@ -37,10 +37,13 @@ mmm.v.updatePerson = {
         formEl.addEventListener("submit", function (e) {
             e.preventDefault();
         });
+
+        document.getElementById("Person-M").style.display = "none";
+        document.getElementById("Person-U").style.display = "block";
     },
     // save data
     handleSaveButtonClickEvent: async function () {
-        const formEl = document.forms['Person'],
+        const formEl = document.forms['updatePerson'],
             selectPersonEl = formEl.selectPerson;
         const slots = {
             personID: formEl.personID.value,
