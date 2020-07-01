@@ -10,7 +10,7 @@ mmm.v.deletePerson = {
         const formEl = document.forms['deletePerson'],
             deleteButton = formEl.commit,
             selectPersonEl = formEl.selectPerson;
-        selectPersonEl.innerHTML = "";
+        selectPersonEl.innerHTML = "<option>---</option>";
 
         // load all Person
         const persons = await Person.retrieveAll();
