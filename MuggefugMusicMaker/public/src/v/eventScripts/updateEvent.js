@@ -9,6 +9,8 @@ mmm.v.updateEvent = {
         const formEl = document.forms['updateEvent'];
             updateButton = formEl.commit,
             selectEventEl = formEl.selectEvent;
+        const selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget");
+        selectLineUpWidget.innerHTML = "";
         // load all events
         const events = await Event.retrieveAll();
         selectEventEl.innerHTML = "<option>---</option>"
@@ -36,15 +38,12 @@ mmm.v.updateEvent = {
 
                     instances[e.artistID] = e;
                 }
-                const selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget");
-                let artists = Artist.retrieveAll();
-                console.log(artists);
                 util.createMultipleChoiceWidget( selectLineUpWidget, event.lineUp,
                     instances, "artistID", "name", 1);
 
             } else {
                 formEl.reset();
-                selectArtistWidget.innerHTML = "";
+                selectLineUpWidget.innerHTML = "";
 
             }
         });
@@ -68,8 +67,8 @@ mmm.v.updateEvent = {
             name: formEl.name.value,
             eventDate: formEl.eventDate.value
         };
-        selectArtistWidget = formEl.querySelector(".MultiChoiceWidget"),
-        multiChoiceListEl = selectArtistWidget.firstElementChild;
+        selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget"),
+        multiChoiceListEl = selectLineUpWidget.firstElementChild;
         let artistIdRefsToRemove=[],artistIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("removed")) {
@@ -82,7 +81,7 @@ mmm.v.updateEvent = {
         await Event.update(slots,artistIdRefsToAdd,artistIdRefsToRemove);
         // update the selection list option element
         selectEventEl.options[selectEventEl.selectedIndex].text = slots.name;
-        selectArtistWidget.innerHTML = "";
+        selectLineUpWidget.innerHTML = "";
         formEl.reset();
     }
 };

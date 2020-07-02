@@ -17,8 +17,7 @@ mmm.v.retrieveAndListAllEvents = {
             let artist_connections = await Event.retrieveEventArtistConnection(e);
             let artists = {};
             for(let c of artist_connections) {
-                let artist = await Artist.retrieve(c.artistID);
-                artists[c.artistID] = artist;
+                artists[c.artistID] = await Artist.retrieve(c.artistID);
             }
             const listEl = util.createListFromMap( artists, "name");
             row.insertCell(-1).textContent = e.eventID;

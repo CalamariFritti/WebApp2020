@@ -3,7 +3,7 @@ class Event {
         this.eventID = eventID;
         this.name = name;
         this.eventDate = eventDate;
-        this._lineUp = lineUp;
+        this.lineUp = lineUp;
     }
 
     /* ################################################
@@ -111,7 +111,15 @@ class Event {
     Event.destroy = async function(eventID){
         await db.collection("Event").doc(eventID).delete();
         console.log("Successfuly deleted an Event with id " + eventID);
-    }
+
+        let conn_query = await db.collection("EventAndArtist").where("eventID",'==',eventID);
+        conn_query.get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                doc.ref.delete();
+                console.log("Successfuly deleted an Artist/Event connection with eventID " + eventID);
+            });
+        });
+    };
 
 
     Event.removeArtistsFromEvent = async function(slots,artistsToRemove){
@@ -183,6 +191,17 @@ Event.generateTestData = function () {
         db.collection("Event").doc( id).set( eventRecord);
     }
     console.log(`${Object.keys( eventRecords).length} events saved.`);
+
+    let event_artist_record = {};
+    event_artist_record["11"] = {eventID: "1", artistID: "1", connection_id: "11"};
+    event_artist_record["22"] = {eventID: "2", artistID: "2", connection_id: "22"};
+    event_artist_record["23"] = {eventID: "2", artistID: "3", connection_id: "23"};
+
+    for (let id of Object.keys( event_artist_record)) {
+        let eventArtistRecord = event_artist_record[id];
+        db.collection("EventAndArtist").doc( id).set( eventArtistRecord);
+    }
+    console.log(`${Object.keys( event_artist_record).length} artists/persons saved.`);
 };
 // Clear test data
 Event.clearData = function () {
@@ -192,6 +211,12 @@ Event.clearData = function () {
             // Delete event docs iteratively
             eventsFsQuerySnapshot.forEach( function (eventDoc) {
                 db.collection("Event").doc( eventDoc.id).delete();
+            });
+        });
+        db.collection("EventAndArtist").get().then( function (eventsFsQuerySnapshot) {
+            // Delete event docs iteratively
+            eventsFsQuerySnapshot.forEach( function (eventDoc) {
+                db.collection("EventAndArtist").doc( eventDoc.id).delete();
             });
         });
     }

@@ -37,8 +37,8 @@ mmm.v.createEvent = {
             name: formEl.name.value,
             eventDate: parseInt( formEl.eventDate.value)
         };
-        selectArtistWidget = formEl.querySelector(".MultiChoiceWidget"),
-        multiChoiceListEl = selectArtistWidget.firstElementChild;
+        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
+        multiChoiceListEl = selectMembersWidget.firstElementChild;
         let artistIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("added")) {
@@ -46,7 +46,7 @@ mmm.v.createEvent = {
             }
         }
         await Event.add(slots,artistIdRefsToAdd);
-        selectArtistWidget.innerHTML = "";
+        selectMembersWidget.innerHTML = "";
         formEl.reset();
     }
 };
