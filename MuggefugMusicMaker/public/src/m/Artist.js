@@ -3,7 +3,7 @@ class Artist {
         this.artistID = artistID;
         this.name = name;
         this.contact = contact;
-        this.members = members;
+        this._members = members;
     }
 
     /* ################################################
@@ -125,9 +125,9 @@ Artist.retrieve = async function(artistID){
             eventRecord = queryArtist.data();
         console.log("Artist with the id " + eventRecord.artistID + " successfully retrieved");
         let artist = new Artist(eventRecord);
-        let connections =  await Artist.retrieveArtistPersonConnection(artist);
+        let connections =  await Artist.retrieveArtistPersonConnection(eventRecord);
         let persons = {};
-
+        console.log("ConnectionArtistPerson Array size: "+connections.length);
         for(let c of connections) {
 
           try{
