@@ -20,6 +20,17 @@ mmm.v.updateEvent = {
             optionEl.value = e.eventID;
             selectEventEl.add( optionEl, null);
         }
+
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Event.checkName( formEl.name.value).message)});
+
+        formEl.eventDate.addEventListener("input", function () {
+            formEl.eventDate.setCustomValidity(
+                Event.checkDate( formEl.eventDate.value).message)});
+
+
         // when a event is selected, fill the form with its data
         selectEventEl.addEventListener("change", async function () {
             const eventID = selectEventEl.value;
@@ -67,6 +78,14 @@ mmm.v.updateEvent = {
             name: formEl.name.value,
             eventDate: formEl.eventDate.value
         };
+
+        formEl.name.setCustomValidity(
+            Event.checkName( formEl.name.value).message);
+
+        formEl.eventDate.setCustomValidity(
+            Event.checkDate( formEl.eventDate.value).message);
+
+
         selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget"),
         multiChoiceListEl = selectLineUpWidget.firstElementChild;
         let artistIdRefsToRemove=[],artistIdRefsToAdd =[];

@@ -20,6 +20,11 @@ mmm.v.updateArtist = {
             optionEl.value = e.artistID;
             selectArtistEl.add( optionEl, null);
         }
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Artist.checkName( formEl.name.value).message)});
+
         // when a artist is selected, fill the form with its data
         selectArtistEl.addEventListener("change", async function () {
             const artistID = selectArtistEl.value;
@@ -69,6 +74,10 @@ mmm.v.updateArtist = {
             name: formEl.name.value,
             contact: formEl.contact.value
         };
+
+        formEl.name.setCustomValidity(
+            Artist.checkName( formEl.name.value).message);
+
         selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
         multiChoiceListEl = selectMembersWidget.firstElementChild;
         let personIdRefsToRemove=[],personIdRefsToAdd =[];

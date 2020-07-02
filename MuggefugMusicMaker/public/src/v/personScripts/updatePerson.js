@@ -9,6 +9,7 @@ mmm.v.updatePerson = {
         const formEl = document.forms['updatePerson'];
         updateButton = formEl.commit,
             selectPersonEl = formEl.selectPerson;
+        selectPersonEl.innerHTML = "<option>---</option>";
         // load all Persons
         const persons = await Person.retrieveAll();
         for (let p of persons) {
@@ -17,6 +18,11 @@ mmm.v.updatePerson = {
             optionEl.value = p.personID;
             selectPersonEl.add( optionEl, null);
         }
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Person.checkName( formEl.name.value).message)});
+
         // when a person is selected, fill the form with its data
         selectPersonEl.addEventListener("change", async function () {
             const personID = selectPersonEl.value;
@@ -49,6 +55,12 @@ mmm.v.updatePerson = {
             personID: formEl.personID.value,
             name: formEl.name.value
         };
+
+        formEl.name.setCustomValidity(
+            Person.checkName( formEl.name.value).message);
+
+
+
         await Person.update(slots);
         // update the selection list option element
         selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.name;
