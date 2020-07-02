@@ -66,7 +66,7 @@ mmm.v.updateEvent = {
         const slots = {
             eventID: formEl.eventID.value,
             name: formEl.name.value,
-            eventDate: parseInt( formEl.eventDate.value)
+            eventDate: formEl.eventDate.value
         };
         selectArtistWidget = formEl.querySelector(".MultiChoiceWidget"),
         multiChoiceListEl = selectArtistWidget.firstElementChild;
