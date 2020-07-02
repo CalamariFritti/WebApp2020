@@ -9,19 +9,54 @@
   <script src="/__/firebase/7.14.5/firebase-firestore.js"></script>
   <!-- Initialize Firebase -->
   <script src="/__/firebase/init.js"></script>
-
+    <link href="css/main.css" rel="stylesheet">
   <script src="src/c/initialize.js"></script>
   <script src="src/m/Event.js"></script>
+  <script src="src/m/Person.js"></script>
+    <script src="src/m/Artist.js"></script>
 </head>
   <body>
-  <h1>Muggefug Music Maker </h1>
-  <div class="subheading">An Eventplaner for Muggefug</div>
+      <header>
+      <div class="wrapper clearfix">
+          <div class="title">
+              <h1>Muggefug Music Maker</h1>
+          </div>
+          <nav>
+              <ul>
+                  <li><a href="events.html">Events</a></li>
+                  <li><a href="artists.html">Artists</a></li>
+                  <li><a href="persons.html">Persons</a></li>
+              </ul>
+          </nav>
+      </div>
+      </header>
+      <main>
+          <div class="wrapper clearfix">
+              <div class="two-col-menu">
+                  <ul class="menu">
+                      <li><a href="events.html">Manage Events</a></li>
+                      <li><a href="artists.html">Manage Artists</a></li>
+                      <li><a href="persons.html">Manage Persons</a></li>
+                  </ul>
+                  <ul class="menu">
+                      <li><button type="button" onclick="mmm.m.init.generateTestData()">Generate test data</button></li>
+                      <li><button type="button" onclick="mmm.m.init.clearData()">Clear database</button></li>
+                  </ul>
+              </div>
+
+          </div>
+      </main>
+<!--  <div class="subheading">An Eventplaner for Muggefug</div>
   <menu>
     <li><a href="createEvent.html">Create</a> a new Event</li>
-    <li><a href="retrieveAndListAllEvent.html">Retrieve</a> and list all Events</li>
+    <li><a href="retrieveAndListAllEvents.html">Retrieve</a> and list all Events</li>
     <li><a href="updateEvent.html">Update</a> a Event</li>
     <li><a href="deleteEvent.html">Delete</a> a Event</li>
-  </menu>
+    <li><a href="createPerson.html">Create</a> a new Person</li>
+    <li><a href="retrieveAndListAllPersons.html">Retrieve</a> and list all Persons</li>
+    <li><a href="updatePerson.html">Update</a> a Person</li>
+    <li><a href="deletePerson.html">Delete</a> a Person</li>
+  </menu>-->
 
   </body>
 </html>

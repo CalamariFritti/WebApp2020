@@ -1,0 +1,126 @@
+/* ==========================================================================
+   Custom styles
+   ========================================================================== */
+
+body {
+  padding: 8px;
+}
+
+table { 
+  margin: 1em 0;
+  border-collapse:collapse;
+}  
+table, td, th { 
+  border: 1px solid black;
+  padding: 5px;
+}  
+table th {
+  background: aliceblue;
+}
+
+menu {
+  width: 15em;
+  text-align: center;
+  border: 1px solid black;
+  padding: 8px;
+  border-radius: 5px;
+}
+menu li {
+  list-style: none;
+  height: 1.5em;
+  margin: 2px auto;
+}
+menu li button {
+  width: 15em;
+}
+
+form :invalid {
+  box-shadow: none;  /* neutralizing FF */
+  outline: dotted red;      
+}
+form > div  {
+  clear: right;
+  margin-bottom: 0.7em;  
+}
+form > div > label {
+  display: block;     /* by default, one labeled control per line*/
+}
+form > div.field-group > label {
+  display: inline-block;
+}
+form > div.widget > label {
+  display: inline;
+}
+form > div.widget > div {
+  display: inline-block;
+}
+form > div > label {
+  position: relative;
+  margin: 0 0 5px 0;  
+  width: 20em;  
+}
+form > div > label > input[type="text"], 
+    form > div > label > select, 
+    form > div.widget > div, 
+    form > div > label > output {
+  position: absolute;
+  left: 8em;
+}
+
+/* the height of multi-line elements must be limited */
+form > div.select-many { 
+	height: 6em;
+}
+form > div.widget {
+	height: 8em;
+}
+
+form > div  > button {
+  margin-right: 0.5em;  
+}
+
+form > fieldset {
+  margin-bottom: 1em;  
+}
+form > fieldset > label {
+  margin-right: 1em;  
+}
+form > fieldset > label > input[type="radio"],
+    form > fieldset > label > input[type="checkbox"] {
+  margin-right: 0.5em;  
+}
+
+footer {
+  margin: 2em auto;
+}
+
+/* Association List Widget */
+form div.MultiSelectionWidget {
+  outline: solid grey 1px;
+  padding: 5px;
+  max-width: 30em;
+  max-height: 8em;  /* of the widget contaner */
+}
+form div.MultiSelectionWidget > ul {
+  padding-left: 8px;
+  margin-top: 0;
+  list-style-type:none;
+}
+form div.MultiSelectionWidget > ul > li {
+  width: 100%;
+  clear: right;
+}
+form div.MultiSelectionWidget > ul > li > button {
+  float: right;
+  margin-left: 0.5em;
+  font-size: 80%;
+  vertical-align: middle;
+}
+form div.MultiSelectionWidget > ul > li.removed {
+  color: red;
+  text-decoration: line-through;
+}
+form div.MultiSelectionWidget > ul > li.added {
+  color: green;
+}
+
