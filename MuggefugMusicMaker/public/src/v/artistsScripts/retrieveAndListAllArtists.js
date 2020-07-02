@@ -14,9 +14,16 @@ mmm.v.retrieveAndListAllArtists = {
         // for each Event, create a table row with a cell for each attribute
         for (let e of artistData) {
             let row = tableBodyEl.insertRow();
+            let person_connections = await Artist.retrieveArtistPersonConnection(e);
+            let persons = {};
+            for(let c of person_connections) {
+                persons[c.personID] = await Person.retrieve(c.personID);
+            }
+            const listEl = util.createListFromMap( persons, "name");
             row.insertCell(-1).textContent = e.artistID;
             row.insertCell(-1).textContent = e.name;
             row.insertCell(-1).textContent = e.contact;
+            row.insertCell(-1).appendChild( listEl);
         }
         document.getElementById("Artist-M").style.display = "none";
         document.getElementById("Artist-R").style.display = "block";

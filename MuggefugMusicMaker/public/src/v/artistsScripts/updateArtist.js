@@ -9,6 +9,9 @@ mmm.v.updateArtist = {
         const formEl = document.forms['updateArtist'];
             updateButton = formEl.commit,
             selectArtistEl = formEl.selectArtist;
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        selectMembersWidget.innerHTML = "";
+        formEl.reset();
         // load all artists
         const artists = await Artist.retrieveAll();
         selectArtistEl.innerHTML = "<option>---</option>";
@@ -28,8 +31,22 @@ mmm.v.updateArtist = {
                 formEl.artistID.value = artist.artistID;
                 formEl.name.value = artist.name;
                 formEl.contact.value = artist.contact;
+
+                const personData = await Person.retrieveAll();
+                let instances = {};
+                // for each Event, create a table row with a cell for each attribute
+                for (let e of personData) {
+
+                    instances[e.personID] = e;
+                }
+
+                util.createMultipleChoiceWidget( selectMembersWidget, artist.members,
+                    instances, "personID", "name", 1);
+
             } else {
                 formEl.reset();
+                selectMembersWidget.innerHTML = "";
+
             }
         });
         // set an artist handler for the submit/save button
@@ -52,9 +69,21 @@ mmm.v.updateArtist = {
             name: formEl.name.value,
             contact: formEl.contact.value
         };
-        await Artist.update(slots);
+        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
+        multiChoiceListEl = selectMembersWidget.firstElementChild;
+        let personIdRefsToRemove=[],personIdRefsToAdd =[];
+        for (let mcListItemEl of multiChoiceListEl.children) {
+            if (mcListItemEl.classList.contains("removed")) {
+                personIdRefsToRemove.push( mcListItemEl.getAttribute("data-value"));
+            }
+            if (mcListItemEl.classList.contains("added")) {
+                personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
+            }
+        }
+        await Artist.update(slots,personIdRefsToAdd,personIdRefsToRemove);
         // update the selection list option element
-        selectArtistEl.options[selectArtistEl.selectedIndex].text = slots.title;
+        selectArtistEl.options[selectArtistEl.selectedIndex].text = slots.name;
+        selectMembersWidget.innerHTML = "";
         formEl.reset();
     }
 };

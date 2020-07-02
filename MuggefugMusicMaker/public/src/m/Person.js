@@ -73,6 +73,14 @@ Person.update = async function(slots){
 Person.delete = async function(personID){
     await db.collection("Person").doc(personID).delete();
     console.log("Successfuly deleted a Person with id " + personID);
+
+    let conn_query = await db.collection("ArtistAndPerson").where("personID",'==',personID);
+    conn_query.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+            console.log("Successfuly deleted an Artist/Person connection with personID " + personID);
+        });
+    });
 };
 
 
@@ -81,7 +89,7 @@ Person.delete = async function(personID){
 Person.generateTestData = function () {
     let personRecords = {};
     personRecords["1"] = {personID: "1",
-        name: "Bushido"};
+        name: "Anis Mohamed Youssef Ferchichi"};
     personRecords["2"] = {personID: "2",
         name: "Udo Lindenberg"};
     personRecords["3"] = {personID: "3",

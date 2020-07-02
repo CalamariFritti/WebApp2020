@@ -1,9 +1,9 @@
 class Artist {
-    constructor({artistId,name,contact}) {
-        this.artistId = artistId;
+    constructor({artistID,name,contact,members}) {
+        this.artistID = artistID;
         this.name = name;
         this.contact = contact;
-        //TODO: implement member
+        this._members = members;
     }
 
     /* ################################################
@@ -11,7 +11,7 @@ class Artist {
     ##################################################
      */
 
-    get artistId() {
+    get artistID() {
         return this._artistId;
     }
 
@@ -23,7 +23,7 @@ class Artist {
         return this._contact;
     }
 
-    set artistId(artistId) {
+    set artistID(artistId) {
         this._artistId = artistId;
     }
 
@@ -35,6 +35,14 @@ class Artist {
         this._contact = contact;
     }
 
+
+    get members() {
+        return this._members;
+    }
+
+    set members(value) {
+        this._members = value;
+    }
 }
 /* ################################################
         Database Managment
@@ -58,14 +66,26 @@ Artist.retrieveAll = async function(){
 
 
 // load a specifc Artist from the firebase database
-Artist.retrieve = async function(eventID){
+Artist.retrieve = async function(artistID){
     try {
         let collectArtists = db.collection("Artist"),
-            specificArtist =collectArtists.doc(eventID),
+            specificArtist =collectArtists.doc(artistID),
             queryArtist = await specificArtist.get(),
             eventRecord = queryArtist.data();
-        console.log("Artist with the id" + eventID + "successfuly retrieved");
-        return eventRecord;
+        console.log("Artist with the id" + artistID + "successfuly retrieved");
+        let artist = new Artist(eventRecord);
+        let connections =  await Artist.retrieveArtistPersonConnection(artist);
+        let persons = {};
+        for(let c of connections) {
+
+          try{
+              persons[c.personID] =  await Person.retrieve(c.personID);
+          } catch (e) {
+              console.log(e+" But the show must go on");
+          }
+        }
+        artist.members = persons;
+        return artist;
 
     } catch (error){
         console.log("Error retriving a Artist: " + error);
@@ -73,23 +93,40 @@ Artist.retrieve = async function(eventID){
 
 }
 // add an Artist to the database
-Artist.add = async function(slots){
+Artist.add = async function(slots,personIdRefsToAdd){
     await db.collection("Artist").doc(slots.artistID).set(slots);
+    await Artist.addPersonsToArtist(slots,personIdRefsToAdd);
     console.log("Successfuly added an Artist named " + slots.name);
 }
 
 // update an Artist in the database
-Artist.update = async function(slots){
+Artist.update = async function(slots,personsToAdd,personsToRemove){
     if (Object.keys( slots).length > 0) {
         await db.collection("Artist").doc(slots.artistID).update(slots);
-        console.log("Artist" + slots.artistID +  "modified.");
+        console.log("Artist " + slots.artistID +  " modified.");
     }
+    await Artist.removePersonsFromArtist(slots,personsToRemove);
+    await Artist.addPersonsToArtist(slots,personsToAdd);
 }
 
 //delete an Artist in the database
 Artist.destroy = async function(eventID){
     await db.collection("Artist").doc(eventID).delete();
     console.log("Successfuly deleted an Artist with id " + eventID);
+    let conn_query = await db.collection("ArtistAndPerson").where("artistID",'==',eventID);
+    conn_query.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+            console.log("Successfuly deleted an Artist/Person connection with artistID " + eventID);
+        });
+    });
+    let connevent_query = await db.collection("EventAndArtist").where("artistID",'==',eventID);
+    connevent_query.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+            console.log("Successfuly deleted an Artist/Event connection with artistID " + eventID);
+        });
+    });
 }
 
 
@@ -106,7 +143,57 @@ Artist.retrieveArtistByEventId = async function(eventID) {
         .catch(function(error) {
             console.log("Error getting documents: ", error);
         });
+};
+
+
+Artist.removePersonsFromArtist = async function(slots,personsToRemove){
+
+    for (let personID of personsToRemove) {
+        let connections = await Artist.retrieveArtistPersonConnection(slots,personID);
+        for(let ea of connections) {
+            if(ea.personID === personID) {
+                let conn_query = db.collection("ArtistAndPerson").where("connection_id",'==',ea.connection_id);
+                conn_query.get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        doc.ref.delete();
+                        console.log("Successfuly deleted an Artist/Person connection with id " + ea.connection_id);
+                    });
+                });
+            }
+        }
+    }
+};
+
+Artist.retrieveArtistPersonConnection = async function (slots) {
+
+    return  db.collection("ArtistAndPerson")
+        .where("artistID", "==", slots.artistID)
+        .get()
+        .then(function(querySnapshot) {
+            const temp = [];
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                temp.push(doc.data());
+                console.log(doc.id, " => ", doc.data());
+            });
+            return temp;
+        })
+        .catch(function(error) {
+            console.log("Error getting documents: ", error);
+        });
 }
+Artist.addPersonsToArtist = async function (slots,personsToAdd) {
+    let vars = {};
+    vars.artistID = slots.artistID;
+    for (let personID of personsToAdd) {
+        vars.personID = personID;
+        vars.connection_id = slots.artistID + personID;
+        await db.collection("ArtistAndPerson").doc(vars.connection_id).set(vars);
+        console.log("Successfuly added an Artist/Person with ids " + slots.artistID+" and "+personID);
+    }
+
+}
+
 // Create test data
 Artist.generateTestData = function () {
     let artistRecords = {};
@@ -124,6 +211,17 @@ Artist.generateTestData = function () {
         db.collection("Artist").doc( id).set( artistRecord);
     }
     console.log(`${Object.keys( artistRecords).length} artists saved.`);
+
+    let artist_person_records = {};
+    artist_person_records["11"] = {artistID: "1", personID: "1", connection_id: "11"};
+    artist_person_records["22"] = {artistID: "2", personID: "2", connection_id: "22"};
+    artist_person_records["23"] = {artistID: "2", personID: "3", connection_id: "23"};
+
+    for (let id of Object.keys( artist_person_records)) {
+        let artistPersonRecord = artist_person_records[id];
+        db.collection("ArtistAndPerson").doc( id).set( artistPersonRecord);
+    }
+    console.log(`${Object.keys( artist_person_records).length} artists/persons saved.`);
 };
 // Clear test data
 Artist.clearData = function () {
@@ -133,6 +231,12 @@ Artist.clearData = function () {
             // Delete artist docs iteratively
             artistsFsQuerySnapshot.forEach( function (artistDoc) {
                 db.collection("Artist").doc( artistDoc.id).delete();
+            });
+        });
+        db.collection("ArtistAndPerson").get().then( function (artistsFsQuerySnapshot) {
+            // Delete artist docs iteratively
+            artistsFsQuerySnapshot.forEach( function (artistDoc) {
+                db.collection("ArtistAndPerson").doc( artistDoc.id).delete();
             });
         });
     }

@@ -4,12 +4,26 @@ Methodes for creating Events
  */
 
 mmm.v.createArtist = {
-    setupUserInterface: function () {
+    setupUserInterface: async function () {
         const saveButton = document.forms['createArtist'].commit;
-
+        const formEl = document.forms['createArtist'];
         // set an event handler for the submit/save button
         saveButton.addEventListener("click",
            this.handleSaveButtonClickEvent);
+
+        const personData = await Person.retrieveAll();
+        let instances = {};
+        // for each Event, create a table row with a cell for each attribute
+        for (let e of personData) {
+
+            instances[e.personID] = e;
+        }
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        let artists = Artist.retrieveAll();
+        console.log(artists);
+        util.createMultipleChoiceWidget( selectMembersWidget, {},
+            instances, "personID", "name", 1);
+
         document.getElementById("Artist-M").style.display = "none";
         document.getElementById("Artist-C").style.display = "block";
     },
@@ -21,8 +35,16 @@ mmm.v.createArtist = {
             name: formEl.name.value,
             contact: formEl.contact.value
         };
-        //add the Event to the database
-        await Artist.add( slots);
+        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
+            multiChoiceListEl = selectMembersWidget.firstElementChild;
+        let personIdRefsToAdd =[];
+        for (let mcListItemEl of multiChoiceListEl.children) {
+            if (mcListItemEl.classList.contains("added")) {
+                personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
+            }
+        }
+        await Artist.add(slots,personIdRefsToAdd);
+        selectMembersWidget.innerHTML = "";
         formEl.reset();
     }
 };
