@@ -48,7 +48,7 @@ Artist.retrieveAll = async function(){
             queryArtists = await  collectArtists.get(),
             documentArtists = queryArtists.docs,
             eventRecord = documentArtists.map(d => d.data());
-        console.log(collectArtists);
+        console.log("Artists "+eventRecord);
         return eventRecord;
     } catch (error){
         console.log("Error retriving all Artists: $(error) ");
@@ -93,3 +93,47 @@ Artist.destroy = async function(eventID){
 }
 
 
+Artist.retrieveArtistByEventId = async function(eventID) {
+
+    db.collection("Artist").where("eventId", "==", eventID)
+        .get()
+        .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            });
+        })
+        .catch(function(error) {
+            console.log("Error getting documents: ", error);
+        });
+}
+// Create test data
+Artist.generateTestData = function () {
+    let artistRecords = {};
+    artistRecords["1"] = {artistID: "1",
+        name: "Bushido", contact: "Bushido.de"};
+    artistRecords["2"] = {artistID: "2",
+        name: "Imagine Dragon", contact: "thedragons@web.de"};
+    artistRecords["3"] = {artistID: "3",
+        name: "Tolle Affen", contact: "Am anderen Ende"};
+    artistRecords["4"] = {artistID: "4",
+        name: "Max Giesinger", contact: "management@max.com"};
+    // Save all test Book records to Firestore DB
+    for (let id of Object.keys( artistRecords)) {
+        let artistRecord = artistRecords[id];
+        db.collection("Artist").doc( id).set( artistRecord);
+    }
+    console.log(`${Object.keys( artistRecords).length} artists saved.`);
+};
+// Clear test data
+Artist.clearData = function () {
+    if (confirm("Do you really want to delete all artist records?")) {
+        // Retrieve all artist docs from the Firestore collection "artists"
+        db.collection("Artist").get().then( function (artistsFsQuerySnapshot) {
+            // Delete artist docs iteratively
+            artistsFsQuerySnapshot.forEach( function (artistDoc) {
+                db.collection("Artist").doc( artistDoc.id).delete();
+            });
+        });
+    }
+};

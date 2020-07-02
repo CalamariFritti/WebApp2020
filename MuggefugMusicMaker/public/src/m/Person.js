@@ -77,3 +77,33 @@ Person.delete = async function(personID){
 
 
 
+// Create test data
+Person.generateTestData = function () {
+    let personRecords = {};
+    personRecords["1"] = {personID: "1",
+        name: "Bushido"};
+    personRecords["2"] = {personID: "2",
+        name: "Udo Lindenberg"};
+    personRecords["3"] = {personID: "3",
+        name: "Klara Himmel"};
+    personRecords["4"] = {personID: "4",
+        name: "Peter Maffay"};
+    // Save all test Book records to Firestore DB
+    for (let id of Object.keys( personRecords)) {
+        let personRecord = personRecords[id];
+        db.collection("Person").doc( id).set( personRecord);
+    }
+    console.log(`${Object.keys( personRecords).length} persons saved.`);
+};
+// Clear test data
+Person.clearData = function () {
+    if (confirm("Do you really want to delete all person records?")) {
+        // Retrieve all person docs from the Firestore collection "persons"
+        db.collection("Person").get().then( function (personsFsQuerySnapshot) {
+            // Delete person docs iteratively
+            personsFsQuerySnapshot.forEach( function (personDoc) {
+                db.collection("Person").doc( personDoc.id).delete();
+            });
+        });
+    }
+};

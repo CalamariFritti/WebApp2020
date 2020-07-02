@@ -11,10 +11,11 @@ mmm.v.updateEvent = {
             selectEventEl = formEl.selectEvent;
         // load all events
         const events = await Event.retrieveAll();
+        selectEventEl.innerHTML = "<option>---</option>"
         for (let e of events) {
             let optionEl = document.createElement("option");
             optionEl.text = e.name;
-            optionEl.value = e.artistID;
+            optionEl.value = e.eventID;
             selectEventEl.add( optionEl, null);
         }
         // when a event is selected, fill the form with its data
@@ -24,11 +25,27 @@ mmm.v.updateEvent = {
             if (eventID) {
                 // retrieve up-to-date event
                 const event = await Event.retrieve( eventID);
-                formEl.artistID.value = event.artistID;
+                formEl.eventID.value = event.eventID;
                 formEl.name.value = event.name;
                 formEl.eventDate.value = event.eventDate;
+
+                const artistData = await Artist.retrieveAll();
+                let instances = {};
+                // for each Event, create a table row with a cell for each attribute
+                for (let e of artistData) {
+
+                    instances[e.artistID] = e;
+                }
+                const selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget");
+                let artists = Artist.retrieveAll();
+                console.log(artists);
+                util.createMultipleChoiceWidget( selectLineUpWidget, event.lineUp,
+                    instances, "artistID", "name", 1);
+
             } else {
                 formEl.reset();
+                selectArtistWidget.innerHTML = "";
+
             }
         });
         // set an event handler for the submit/save button
@@ -47,13 +64,25 @@ mmm.v.updateEvent = {
         const formEl = document.forms['updateEvent'],
             selectEventEl = formEl.selectEvent;
         const slots = {
-            artistID: formEl.artistID.value,
+            eventID: formEl.eventID.value,
             name: formEl.name.value,
             eventDate: parseInt( formEl.eventDate.value)
         };
-        await Event.update(slots);
+        selectArtistWidget = formEl.querySelector(".MultiChoiceWidget"),
+        multiChoiceListEl = selectArtistWidget.firstElementChild;
+        let artistIdRefsToRemove=[],artistIdRefsToAdd =[];
+        for (let mcListItemEl of multiChoiceListEl.children) {
+            if (mcListItemEl.classList.contains("removed")) {
+                artistIdRefsToRemove.push( mcListItemEl.getAttribute("data-value"));
+            }
+            if (mcListItemEl.classList.contains("added")) {
+                artistIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
+            }
+        }
+        await Event.update(slots,artistIdRefsToAdd,artistIdRefsToRemove);
         // update the selection list option element
         selectEventEl.options[selectEventEl.selectedIndex].text = slots.name;
+        selectArtistWidget.innerHTML = "";
         formEl.reset();
     }
 };
