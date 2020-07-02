@@ -21,7 +21,7 @@ mmm.v.createEvent = {
         console.log(formEl);
         console.log("Daten werden übergeben.");
         const slots = {
-            artistID: formEl.artistID.value,
+            eventID: formEl.eventID.value,
             name: formEl.name.value,
             eventDate: parseInt( formEl.eventDate.value)
         };

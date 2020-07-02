@@ -51,7 +51,7 @@ mmm.v.updatePerson = {
         };
         await Person.update(slots);
         // update the selection list option element
-        selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.title;
+        selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.name;
         formEl.reset();
     }
 };

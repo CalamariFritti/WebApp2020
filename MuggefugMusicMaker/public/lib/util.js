@@ -168,11 +168,7 @@ var util = {
       var listItemEl=null, listEl=null;
       if (e.target.tagName === "BUTTON") {  // delete/undo button
         listItemEl = e.target.parentNode;
-        listEl = listItemEl.parentNode;
-        if (listEl.children.length <= minCard) {
-          alert("A book must have at least one author!");
-          return;
-        }
+
         if (listItemEl.classList.contains("removed")) {
           // undoing a previous removal
           listItemEl.classList.remove("removed");
@@ -225,6 +221,7 @@ var util = {
    *                 including optPar.displayProp and optPar.selection
    */
   fillMultipleChoiceWidgetWithOptions: function (selectEl, selectionRange, keyProp, optPar) {
+
     var keys=[], obj=null, displayProp="", i=0;
     // delete old contents
     selectEl.innerHTML = "";
@@ -235,6 +232,7 @@ var util = {
     for (let i=0; i < keys.length; i++) {
       // if invoked with a selection argument, only add options for objects
       // that are not yet selected
+      console.log("BIN hier");
       if (!optPar || !optPar.selection || !optPar.selection[keys[i]]) {
         obj = selectionRange[keys[i]];
         if (optPar && optPar.displayProp) displayProp = optPar.displayProp;

@@ -84,10 +84,10 @@
 <!-- ======================================================= -->
     <h1>Create a new Event record</h1>
       <form id="createEvent">
-        <div class="field"><label>EventID: <input name="eventID"/></label></div>
-        <div class="field"><label>Name: <input name="name"/></label></div>
-        <div class="field"><label>Event Date: <input name="eventDate"/></label></div>
-        <div class="button-group">
+        <div class="field"><label>EventID: <input type="text" name="eventID"/></label></div>
+        <div class="field"><label>Name: <input type="text" name="name"/></label></div>
+        <div class="field"><label>Event Date: <input type="date" name="eventDate"/></label></div>
+        <div class="button-group" style="width:10em;">
           <button name="commit" type="button">Save</button>
           <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
         </div>
@@ -108,8 +108,11 @@
         </div>
         <div class="field"><label>Event ID <output name="eventID"/> </label></div>
         <div class="field"><label>Name: <input type="text" name="name"/></label></div>
-        <div class="field"><label>Event Date: <input name="eventDate"/></label></div>
-        <div class="button-group">
+        <div class="field"><label>Event Date: <input type="text" name="eventDate"/></label></div>
+        <div class="widget">
+          <label>LineUp: <div class="MultiChoiceWidget"></div></label>
+        </div>
+        <div class="button-group" style="width:10em;">
           <button name="commit" type="button">Save Changes</button>
           <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
         </div>
@@ -130,7 +133,7 @@
         </label>
         </div>
       </div>
-      <div class="button-group">
+      <div class="button-group" style="width:10em;">
         <button name="commit" type="button">Delete</button>
         <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>
       </div>

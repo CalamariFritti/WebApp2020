@@ -15,7 +15,7 @@ mmm.v.deleteEvent = {
         for (let e of events) {
             let optionEl = document.createElement("option");
             optionEl.text = e.name;
-            optionEl.value = e.artistID;
+            optionEl.value = e.eventID;
             selectEventEl.add( optionEl, null);
         }
         // Set an event handler for the submit/delete button

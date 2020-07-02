@@ -14,7 +14,7 @@ mmm.v.retrieveAndListAllEvents = {
         // for each Event, create a table row with a cell for each attribute
         for (let e of eventData) {
             let row = tableBodyEl.insertRow();
-            row.insertCell(-1).textContent = e.artistID;
+            row.insertCell(-1).textContent = e.eventID;
             row.insertCell(-1).textContent = e.name;
             row.insertCell(-1).textContent = e.eventDate;
         }
