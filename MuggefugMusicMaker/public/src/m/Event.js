@@ -25,14 +25,31 @@ class Event {
 
     set eventID(id) {
         this._eventID = id;
+        let constraintViolation = Event.checkEventId(id);
+        if (constraintViolation instanceof NoConstraintViolation) {
+            this._eventID = id;
+        } else {
+            throw constraintViolation;
+        }
     }
 
-    set name(n) {
-        this._name = n;
+    set name(name) {
+        this._name = name;
+       const validationResult = Event.checkName(name);
+        if (validationResult instanceof NoConstraintViolation) {
+            this._name = name;
+        } else {
+            throw validationResult;
+        }
     }
 
     set eventDate(date) {
-        this._eventDate = date;
+        let validationResult = Event.checkDate( date);
+        if (validationResult instanceof NoConstraintViolation) {
+            this._eventDate = date;
+        } else {
+            throw validationResult;
+        }
     }
 
     get lineUp() {
@@ -41,6 +58,63 @@ class Event {
 
     set lineUp(value) {
         this._lineUp = value;
+    }
+
+    static checkName(name) {
+        if (name === undefined || name === "" || name === "\"\"") {
+            return new MandatoryValueConstraintViolation("A name must be provided!");
+        } else if (name === "" || name === undefined) {
+            return new RangeConstraintViolation("The name must be a non-empty string!");
+        } else {
+            return new NoConstraintViolation();
+        }
+    }
+    static checkEventId(id) {
+        if (id === undefined) {
+            return new NoConstraintViolation();  // may be optional as an IdRef
+        } else {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id) || !Number.isInteger(id) || id < 1) {
+                return new RangeConstraintViolation("The person ID must be a positive integer!");
+            } else {
+                return new NoConstraintViolation();
+            }
+        }
+    }
+    static checkEventIdAsId (id) {
+
+        let constraintViolation = Event.checkEventId(id);
+        // let person = await Person.retrieve(id);
+        if ((constraintViolation instanceof NoConstraintViolation)) {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id)) {
+                return new MandatoryValueConstraintViolation(
+                    "A positive integer value for the person ID is required!");
+            }  else {
+                console.log("ID Person ist: "+id);
+                constraintViolation = new NoConstraintViolation();
+            }
+        }
+        return constraintViolation;
+    }
+    static checkDate (date) {
+        if(undefined === date || date === "") {
+            return new MandatoryValueConstraintViolation("There must be a Date");
+        }
+        let objectReleaseDate = new Date(date);
+        let isoDate;
+        try {
+            isoDate = util.createIsoDateString(objectReleaseDate);
+        } catch (e){
+            return new RangeConstraintViolation("The release Date has not the correct iso format YYYY-MM-DD");
+        }
+        if(util_old.isNotIsoDateString(isoDate)) {
+            return new RangeConstraintViolation("The release Date has not the correct iso format YYYY-MM-DD");
+        }
+        return new NoConstraintViolation();
+
     }
 }
     /* ################################################
@@ -78,8 +152,12 @@ class Event {
             let connections =  await Event.retrieveEventArtistConnection(event);
             let artists = {};
             for(let c of connections) {
+                try{
+                    artists[c.artistID] =  await Artist.retrieve(c.artistID);
+                } catch (e) {
+                    console.log(e+" But the show must go on");
+                }
 
-                artists[c.artistID] =  await Artist.retrieve(c.artistID);
             }
             event.lineUp = artists;
             return event;
@@ -178,13 +256,13 @@ class Event {
 Event.generateTestData = function () {
     let eventRecords = {};
     eventRecords["1"] = {eventID: "1",
-        name: "Bushido Konzert", eventDate: "12.07.2020"};
+        name: "Bushido Konzert", eventDate: "2020-12-07"};
     eventRecords["2"] = {eventID: "2",
-        name: "Die Party des Löwen", eventDate: "13.03.2021"};
+        name: "Die Party des Löwen", eventDate: "2021-11-03"};
     eventRecords["3"] = {eventID: "3",
-        name: "Der Wahnsinn", eventDate: "15.09.2019"};
+        name: "Der Wahnsinn", eventDate: "2019-08-09"};
     eventRecords["4"] = {eventID: "4",
-        name: "Die gute Ute", eventDate: "28.02.2019"};
+        name: "Die gute Ute", eventDate: "2019-02-28"};
     // Save all test Book records to Firestore DB
     for (let id of Object.keys( eventRecords)) {
         let eventRecord = eventRecords[id];

@@ -11,6 +11,14 @@ mmm.v.createArtist = {
         saveButton.addEventListener("click",
            this.handleSaveButtonClickEvent);
 
+        formEl.artistID.addEventListener("input", function () {
+            formEl.artistID.setCustomValidity(
+                Artist.checkArtistIdAsId( formEl.artistID.value).message)});
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Artist.checkName( formEl.name.value).message)});
+
         const personData = await Person.retrieveAll();
         let instances = {};
         // for each Event, create a table row with a cell for each attribute
@@ -35,6 +43,13 @@ mmm.v.createArtist = {
             name: formEl.name.value,
             contact: formEl.contact.value
         };
+        formEl.artistID.setCustomValidity(
+            Artist.checkArtistIdAsId( formEl.artistID.value).message);
+
+        formEl.name.setCustomValidity(
+            Artist.checkName( formEl.name.value).message);
+
+
         selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
             multiChoiceListEl = selectMembersWidget.firstElementChild;
         let personIdRefsToAdd =[];
@@ -43,8 +58,15 @@ mmm.v.createArtist = {
                 personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        await Artist.add(slots,personIdRefsToAdd);
-        selectMembersWidget.innerHTML = "";
-        formEl.reset();
+        if (formEl.checkValidity()) await Artist.add(slots,personIdRefsToAdd);
+        // neutralize the submit event
+        formEl.addEventListener("submit", function (e) {
+            e.preventDefault();
+            formEl.reset();
+            selectMembersWidget.innerHTML = "";
+        });
+
+        document.getElementById("Artist-M").style.display = "none";
+        document.getElementById("Artist-C").style.display = "block";
     }
 };

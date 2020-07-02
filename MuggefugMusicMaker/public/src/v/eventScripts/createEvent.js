@@ -7,10 +7,23 @@ mmm.v.createEvent = {
     setupUserInterface: async function () {
         const formEl = document.querySelector("section#Event-C > form#createEvent");
         const saveButton = formEl.commit;
-        console.log(saveButton);
+        formEl.reset();
         // set an event handler for the submit/save button
         saveButton.addEventListener("click",
             this.handleSaveButtonClickEvent);
+
+
+        formEl.eventID.addEventListener("input", function () {
+            formEl.eventID.setCustomValidity(
+                Event.checkEventIdAsId( formEl.eventID.value).message)});
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Event.checkName( formEl.name.value).message)});
+
+        formEl.eventDate.addEventListener("input", function () {
+            formEl.eventDate.setCustomValidity(
+                Event.checkDate( formEl.eventDate.value).message)});
 
         const artistData = await Artist.retrieveAll();
         let instances = {};
@@ -30,13 +43,21 @@ mmm.v.createEvent = {
     // save user input data
     handleSaveButtonClickEvent: async function () {
         const formEl = document.forms['createEvent'];
-        console.log(formEl);
-        console.log("Daten werden übergeben.");
         const slots = {
             eventID: formEl.eventID.value,
             name: formEl.name.value,
-            eventDate: parseInt( formEl.eventDate.value)
+            eventDate: formEl.eventDate.value
         };
+
+            formEl.eventID.setCustomValidity(
+                Event.checkEventIdAsId( formEl.eventID.value).message);
+
+            formEl.name.setCustomValidity(
+                Event.checkName( formEl.name.value).message);
+
+            formEl.eventDate.setCustomValidity(
+                Event.checkDate( formEl.eventDate.value).message);
+
         selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
         multiChoiceListEl = selectMembersWidget.firstElementChild;
         let artistIdRefsToAdd =[];
@@ -45,8 +66,16 @@ mmm.v.createEvent = {
                 artistIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        await Event.add(slots,artistIdRefsToAdd);
-        selectMembersWidget.innerHTML = "";
-        formEl.reset();
+        if (formEl.checkValidity()) await  await Event.add(slots,artistIdRefsToAdd);
+        // neutralize the submit event
+        formEl.addEventListener("submit", function (e) {
+            e.preventDefault();
+            formEl.reset();
+            selectMembersWidget.innerHTML = "";
+        });
+
+        document.getElementById("Event-M").style.display = "none";
+        document.getElementById("Event-C").style.display = "block";
+
     }
 };

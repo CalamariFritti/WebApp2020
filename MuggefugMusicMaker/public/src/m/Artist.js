@@ -3,7 +3,7 @@ class Artist {
         this.artistID = artistID;
         this.name = name;
         this.contact = contact;
-        this._members = members;
+        this.members = members;
     }
 
     /* ################################################
@@ -24,11 +24,23 @@ class Artist {
     }
 
     set artistID(artistId) {
-        this._artistId = artistId;
+        this._artistId = parseInt(artistId);
+        let constraintViolation = Artist.checkArtistId(artistId);
+        if (constraintViolation instanceof NoConstraintViolation) {
+            this._artistId = parseInt(artistId);
+        } else {
+            throw constraintViolation;
+        }
     }
 
-    set name(n) {
-        this._name = n;
+    set name(name) {
+        this._name = name;
+        const validationResult = Artist.checkName(name);
+        if (validationResult instanceof NoConstraintViolation) {
+            this._name = name;
+        } else {
+            throw validationResult;
+        }
     }
 
     set contact(contact) {
@@ -42,6 +54,45 @@ class Artist {
 
     set members(value) {
         this._members = value;
+    }
+    static checkName(name) {
+        if (name === undefined || name === "" || name === "\"\"") {
+            return new MandatoryValueConstraintViolation("A name must be provided!");
+        } else if (name === "" || name === undefined) {
+            return new RangeConstraintViolation("The name must be a non-empty string!");
+        } else {
+            return new NoConstraintViolation();
+        }
+    }
+    static checkArtistId(id) {
+        if (id === undefined) {
+            return new NoConstraintViolation();  // may be optional as an IdRef
+        } else {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id) || !Number.isInteger(id) || id < 1) {
+                return new RangeConstraintViolation("The person ID must be a positive integer!");
+            } else {
+                return new NoConstraintViolation();
+            }
+        }
+    }
+    static checkArtistIdAsId (id) {
+
+        let constraintViolation = Artist.checkArtistId(id);
+        // let person = await Person.retrieve(id);
+        if ((constraintViolation instanceof NoConstraintViolation)) {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id)) {
+                return new MandatoryValueConstraintViolation(
+                    "A positive integer value for the person ID is required!");
+            }  else {
+                console.log("ID Person ist: "+id);
+                constraintViolation = new NoConstraintViolation();
+            }
+        }
+        return constraintViolation;
     }
 }
 /* ################################################
@@ -72,10 +123,11 @@ Artist.retrieve = async function(artistID){
             specificArtist =collectArtists.doc(artistID),
             queryArtist = await specificArtist.get(),
             eventRecord = queryArtist.data();
-        console.log("Artist with the id" + artistID + "successfuly retrieved");
+        console.log("Artist with the id " + eventRecord.artistID + " successfully retrieved");
         let artist = new Artist(eventRecord);
         let connections =  await Artist.retrieveArtistPersonConnection(artist);
         let persons = {};
+
         for(let c of connections) {
 
           try{
@@ -85,6 +137,7 @@ Artist.retrieve = async function(artistID){
           }
         }
         artist.members = persons;
+        console.log(persons);
         return artist;
 
     } catch (error){
@@ -170,6 +223,7 @@ Artist.retrieveArtistPersonConnection = async function (slots) {
         .where("artistID", "==", slots.artistID)
         .get()
         .then(function(querySnapshot) {
+            console.log("retrieveArtistPersonConnection.."+slots.artistID);
             const temp = [];
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots

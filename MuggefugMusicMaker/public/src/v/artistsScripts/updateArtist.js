@@ -9,8 +9,7 @@ mmm.v.updateArtist = {
         const formEl = document.forms['updateArtist'];
             updateButton = formEl.commit,
             selectArtistEl = formEl.selectArtist;
-        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
-        selectMembersWidget.innerHTML = "";
+
         formEl.reset();
         // load all artists
         const artists = await Artist.retrieveAll();
@@ -39,7 +38,8 @@ mmm.v.updateArtist = {
 
                     instances[e.personID] = e;
                 }
-
+                const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+                selectMembersWidget.innerHTML = "";
                 util.createMultipleChoiceWidget( selectMembersWidget, artist.members,
                     instances, "personID", "name", 1);
 
