@@ -20,10 +20,23 @@ mmm.v.retrieveAndListAllArtists = {
                 persons[c.personID] = await Person.retrieve(c.personID);
             }
             const listEl = util.createListFromMap( persons, "name");
+            let genre = "";
+            switch (e.genre) {
+                case Genre.RAP:
+                    genre = "Rap";
+                    break;
+                case Genre.HIPHOP:
+                    genre="Hiphop";
+                    break;
+                case Genre.ROCK:
+                    genre = "Rock";
+                    break;
+            }
             row.insertCell(-1).textContent = e.artistID;
             row.insertCell(-1).textContent = e.name;
             row.insertCell(-1).textContent = e.contact;
             row.insertCell(-1).appendChild( listEl);
+            row.insertCell(-1).textContent = genre;
         }
         document.getElementById("Artist-M").style.display = "none";
         document.getElementById("Artist-R").style.display = "block";

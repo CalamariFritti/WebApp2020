@@ -1,9 +1,13 @@
+
+Genre = new Enumeration(["Rock","Hiphop","Rap"]);
 class Artist {
-    constructor({artistID,name,contact,members}) {
+
+    constructor({artistID,name,contact,members,genre}) {
         this.artistID = artistID;
         this.name = name;
         this.contact = contact;
         this._members = members;
+        this.genre = genre;
     }
 
     /* ################################################
@@ -21,6 +25,15 @@ class Artist {
 
     get contact() {
         return this._contact;
+    }
+
+
+    get genre() {
+        return this._genre;
+    }
+
+    set genre(value) {
+        this._genre = value;
     }
 
     set artistID(artistId) {
@@ -252,13 +265,13 @@ Artist.addPersonsToArtist = async function (slots,personsToAdd) {
 Artist.generateTestData = function () {
     let artistRecords = {};
     artistRecords["1"] = {artistID: "1",
-        name: "Bushido", contact: "Bushido.de"};
+        name: "Bushido", contact: "Bushido.de", genre: Genre.RAP};
     artistRecords["2"] = {artistID: "2",
-        name: "Imagine Dragon", contact: "thedragons@web.de"};
+        name: "Imagine Dragon", contact: "thedragons@web.de",  genre: Genre.HIPHOP};
     artistRecords["3"] = {artistID: "3",
-        name: "Tolle Affen", contact: "Am anderen Ende"};
+        name: "Tolle Affen", contact: "Am anderen Ende",  genre: Genre.RAP};
     artistRecords["4"] = {artistID: "4",
-        name: "Max Giesinger", contact: "management@max.com"};
+        name: "Max Giesinger", contact: "management@max.com",  genre: Genre.ROCK};
     // Save all test Book records to Firestore DB
     for (let id of Object.keys( artistRecords)) {
         let artistRecord = artistRecords[id];
