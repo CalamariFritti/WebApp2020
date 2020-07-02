@@ -1,9 +1,13 @@
+
+Genre = new Enumeration(["Rock","Hiphop","Rap"]);
 class Artist {
-    constructor({artistID,name,contact,members}) {
+
+    constructor({artistID,name,contact,members,genre}) {
         this.artistID = artistID;
         this.name = name;
         this.contact = contact;
         this._members = members;
+        this.genre = genre;
     }
 
     /* ################################################
@@ -23,12 +27,33 @@ class Artist {
         return this._contact;
     }
 
-    set artistID(artistId) {
-        this._artistId = artistId;
+
+    get genre() {
+        return this._genre;
     }
 
-    set name(n) {
-        this._name = n;
+    set genre(value) {
+        this._genre = value;
+    }
+
+    set artistID(artistId) {
+        this._artistId = parseInt(artistId);
+        let constraintViolation = Artist.checkArtistId(artistId);
+        if (constraintViolation instanceof NoConstraintViolation) {
+            this._artistId = parseInt(artistId);
+        } else {
+            throw constraintViolation;
+        }
+    }
+
+    set name(name) {
+        this._name = name;
+        const validationResult = Artist.checkName(name);
+        if (validationResult instanceof NoConstraintViolation) {
+            this._name = name;
+        } else {
+            throw validationResult;
+        }
     }
 
     set contact(contact) {
@@ -42,6 +67,45 @@ class Artist {
 
     set members(value) {
         this._members = value;
+    }
+    static checkName(name) {
+        if (name === undefined || name === "" || name === "\"\"") {
+            return new MandatoryValueConstraintViolation("A name must be provided!");
+        } else if (name === "" || name === undefined) {
+            return new RangeConstraintViolation("The name must be a non-empty string!");
+        } else {
+            return new NoConstraintViolation();
+        }
+    }
+    static checkArtistId(id) {
+        if (id === undefined) {
+            return new NoConstraintViolation();  // may be optional as an IdRef
+        } else {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id) || !Number.isInteger(id) || id < 1) {
+                return new RangeConstraintViolation("The person ID must be a positive integer!");
+            } else {
+                return new NoConstraintViolation();
+            }
+        }
+    }
+    static checkArtistIdAsId (id) {
+
+        let constraintViolation = Artist.checkArtistId(id);
+        // let person = await Person.retrieve(id);
+        if ((constraintViolation instanceof NoConstraintViolation)) {
+            // convert to integer
+            id = parseInt(id);
+            if (isNaN(id)) {
+                return new MandatoryValueConstraintViolation(
+                    "A positive integer value for the person ID is required!");
+            }  else {
+                console.log("ID Person ist: "+id);
+                constraintViolation = new NoConstraintViolation();
+            }
+        }
+        return constraintViolation;
     }
 }
 /* ################################################
@@ -72,10 +136,11 @@ Artist.retrieve = async function(artistID){
             specificArtist =collectArtists.doc(artistID),
             queryArtist = await specificArtist.get(),
             eventRecord = queryArtist.data();
-        console.log("Artist with the id" + artistID + "successfuly retrieved");
+        console.log("Artist with the id " + eventRecord.artistID + " successfully retrieved");
         let artist = new Artist(eventRecord);
-        let connections =  await Artist.retrieveArtistPersonConnection(artist);
+        let connections =  await Artist.retrieveArtistPersonConnection(eventRecord);
         let persons = {};
+        console.log("ConnectionArtistPerson Array size: "+connections.length);
         for(let c of connections) {
 
           try{
@@ -85,6 +150,7 @@ Artist.retrieve = async function(artistID){
           }
         }
         artist.members = persons;
+        console.log(persons);
         return artist;
 
     } catch (error){
@@ -170,6 +236,7 @@ Artist.retrieveArtistPersonConnection = async function (slots) {
         .where("artistID", "==", slots.artistID)
         .get()
         .then(function(querySnapshot) {
+            console.log("retrieveArtistPersonConnection.."+slots.artistID);
             const temp = [];
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
@@ -198,13 +265,13 @@ Artist.addPersonsToArtist = async function (slots,personsToAdd) {
 Artist.generateTestData = function () {
     let artistRecords = {};
     artistRecords["1"] = {artistID: "1",
-        name: "Bushido", contact: "Bushido.de"};
+        name: "Bushido", contact: "Bushido.de", genre: Genre.RAP};
     artistRecords["2"] = {artistID: "2",
-        name: "Imagine Dragon", contact: "thedragons@web.de"};
+        name: "Imagine Dragon", contact: "thedragons@web.de",  genre: Genre.HIPHOP};
     artistRecords["3"] = {artistID: "3",
-        name: "Tolle Affen", contact: "Am anderen Ende"};
+        name: "Tolle Affen", contact: "Am anderen Ende",  genre: Genre.RAP};
     artistRecords["4"] = {artistID: "4",
-        name: "Max Giesinger", contact: "management@max.com"};
+        name: "Max Giesinger", contact: "management@max.com",  genre: Genre.ROCK};
     // Save all test Book records to Firestore DB
     for (let id of Object.keys( artistRecords)) {
         let artistRecord = artistRecords[id];

@@ -7,10 +7,19 @@ mmm.v.createArtist = {
     setupUserInterface: async function () {
         const saveButton = document.forms['createArtist'].commit;
         const formEl = document.forms['createArtist'];
+        let categorySelectEl = formEl.category;
         // set an event handler for the submit/save button
         saveButton.addEventListener("click",
            this.handleSaveButtonClickEvent);
 
+        formEl.artistID.addEventListener("input", function () {
+            formEl.artistID.setCustomValidity(
+                Artist.checkArtistIdAsId( formEl.artistID.value).message)});
+
+        formEl.name.addEventListener("input", function () {
+            formEl.name.setCustomValidity(
+                Artist.checkName( formEl.name.value).message)});
+        util.fillSelectWithOptions( categorySelectEl, Genre.labels);
         const personData = await Person.retrieveAll();
         let instances = {};
         // for each Event, create a table row with a cell for each attribute
@@ -33,8 +42,16 @@ mmm.v.createArtist = {
         const slots = {
             artistID: formEl.artistID.value,
             name: formEl.name.value,
-            contact: formEl.contact.value
+            contact: formEl.contact.value,
+            genre: parseInt(formEl.category.value)
         };
+        formEl.artistID.setCustomValidity(
+            Artist.checkArtistIdAsId( formEl.artistID.value).message);
+
+        formEl.name.setCustomValidity(
+            Artist.checkName( formEl.name.value).message);
+
+
         selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
             multiChoiceListEl = selectMembersWidget.firstElementChild;
         let personIdRefsToAdd =[];
@@ -43,8 +60,16 @@ mmm.v.createArtist = {
                 personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        await Artist.add(slots,personIdRefsToAdd);
-        selectMembersWidget.innerHTML = "";
+        if (formEl.checkValidity()) await Artist.add(slots,personIdRefsToAdd);
+        // neutralize the submit event
+        formEl.addEventListener("submit", function (e) {
+            e.preventDefault();
+            formEl.reset();
+            selectMembersWidget.innerHTML = "";
+        });
+
+        document.getElementById("Artist-M").style.display = "none";
+        document.getElementById("Artist-C").style.display = "block";
         formEl.reset();
     }
 };
