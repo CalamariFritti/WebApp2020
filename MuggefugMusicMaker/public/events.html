@@ -71,6 +71,7 @@
         <th>EventID</th>
         <th>Name</th>
         <th>Event Date</th>
+        <th>LineUp</th>
       </tr>
       </thead>
       <tbody></tbody>
@@ -87,6 +88,9 @@
         <div class="field"><label>EventID: <input type="text" name="eventID"/></label></div>
         <div class="field"><label>Name: <input type="text" name="name"/></label></div>
         <div class="field"><label>Event Date: <input type="date" name="eventDate"/></label></div>
+        <div class="widget">
+          <label>LineUp: <div class="MultiChoiceWidget"></div></label>
+        </div>
         <div class="button-group" style="width:10em;">
           <button name="commit" type="button">Save</button>
           <button type="button" onclick="mmm.v.events.refreshUI()">Back to menu</button>

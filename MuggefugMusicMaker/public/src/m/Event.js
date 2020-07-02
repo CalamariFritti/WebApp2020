@@ -90,8 +90,9 @@ class Event {
 
     }
     // add an Event to the database
-    Event.add = async function(slots){
+    Event.add = async function(slots, artistIdRefsToAdd){
         await db.collection("Event").doc(slots.eventID).set(slots);
+        await Event.addArtistsToEvent(slots,artistIdRefsToAdd);
         console.log("Successfuly added an Event named " + slots.name);
     }
 
