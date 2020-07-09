@@ -3,6 +3,8 @@
 const mmm = {m: {}, v: {}, c: {}};
 // initialize Firestore database
 const db = firebase.firestore();
+//initialize Firebase Authentication interface
+const auth = firebase.auth();
 
 mmm.m.init = {
     generateTestData: function () {
