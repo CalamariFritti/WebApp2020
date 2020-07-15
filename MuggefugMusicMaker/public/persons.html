@@ -24,6 +24,7 @@
     <script src="src/m/Person.js"></script>
     <script src="src/m/Artist.js"></script>
     <script src="src/c/initialize.js"></script>
+    <script src="src/v/authenticateUser.js"></script>
     <script src="src/v/personScripts/persons.js"></script>
     <script src="src/v/personScripts/createPerson.js"></script>
     <script src="src/v/personScripts/deletePerson.js"></script>
@@ -32,6 +33,11 @@
     <script>
         window.addEventListener("load", mmm.v.persons.setupUserInterface);
     </script>
+    <script>
+        window.addEventListener("load",
+        mmm.v.authenticateUser.setupUiByUserStatus);
+    </script>
+
 </head>
 <body>
 <header>

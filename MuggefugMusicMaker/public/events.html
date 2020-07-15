@@ -24,6 +24,7 @@
   <script src="src/m/Event.js"></script>
   <script src="src/m/Artist.js"></script>
   <script src="src/c/initialize.js"></script>
+  <script src="src/v/authenticateUser.js"></script>
   <script src="src/v/eventScripts/events.js"></script>
   <script src="src/v/eventScripts/createEvent.js"></script>
   <script src="src/v/eventScripts/deleteEvent.js"></script>
@@ -31,6 +32,10 @@
   <script src="src/v/eventScripts/retrieveAndListAllEvents.js"></script>
   <script>
     window.addEventListener("load", mmm.v.events.setupUserInterface);
+  </script>
+  <script>
+    window.addEventListener("load",
+            mmm.v.authenticateUser.setupUiByUserStatus);
   </script>
 </head>
 <body>
