@@ -176,21 +176,21 @@ Artist.update = async function(slots,personsToAdd,personsToRemove){
 }
 
 //delete an Artist in the database
-Artist.destroy = async function(eventID){
-    await db.collection("Artist").doc(eventID).delete();
-    console.log("Successfuly deleted an Artist with id " + eventID);
-    let conn_query = await db.collection("ArtistAndPerson").where("artistID",'==',eventID);
+Artist.destroy = async function(artistID){
+    await db.collection("Artist").doc(artistID).delete();
+    console.log("Successfuly deleted an Artist with id " + artistID);
+    let conn_query = await db.collection("ArtistAndPerson").where("artistID",'==',artistID);
     conn_query.get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             doc.ref.delete();
-            console.log("Successfuly deleted an Artist/Person connection with artistID " + eventID);
+            console.log("Successfuly deleted an Artist/Person connection with artistID " + artistID);
         });
     });
-    let connevent_query = await db.collection("EventAndArtist").where("artistID",'==',eventID);
+    let connevent_query = await db.collection("EventAndArtist").where("artistID",'==',artistID);
     connevent_query.get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
             doc.ref.delete();
-            console.log("Successfuly deleted an Artist/Event connection with artistID " + eventID);
+            console.log("Successfuly deleted an Artist/Event connection with artistID " + artistID);
         });
     });
 }

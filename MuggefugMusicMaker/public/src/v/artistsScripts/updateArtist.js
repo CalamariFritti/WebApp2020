@@ -10,6 +10,8 @@ mmm.v.updateArtist = {
             updateButton = formEl.commit,
             selectArtistEl = formEl.selectArtist;
         let categorySelectEl = formEl.category;
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        selectMembersWidget.innerHTML = "";
         formEl.reset();
         // load all artists
         const artists = await Artist.retrieveAll();
@@ -35,7 +37,8 @@ mmm.v.updateArtist = {
                 formEl.artistID.value = artist.artistID;
                 formEl.name.value = artist.name;
                 formEl.contact.value = artist.contact;
-                formEl.category.selectedIndex = artist.genre;
+                formEl.category.selectedIndex = parseInt(artist.genre);
+                console.log("Genre ist: "+artist.genre);
                 const personData = await Person.retrieveAll();
                 let instances = {};
                 // for each Event, create a table row with a cell for each attribute
@@ -43,8 +46,7 @@ mmm.v.updateArtist = {
 
                     instances[e.personID] = e;
                 }
-                const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
-                selectMembersWidget.innerHTML = "";
+
                 util.createMultipleChoiceWidget( selectMembersWidget, artist.members,
                     instances, "personID", "name", 1);
 
@@ -73,14 +75,13 @@ mmm.v.updateArtist = {
             artistID: formEl.artistID.value,
             name: formEl.name.value,
             contact: formEl.contact.value,
-            genre: parseInt(formEl.category.value)
+            genre: parseInt(parseInt(formEl.category.value)+1)
         };
-
         formEl.name.setCustomValidity(
             Artist.checkName( formEl.name.value).message);
 
-        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
-        multiChoiceListEl = selectMembersWidget.firstElementChild;
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        let multiChoiceListEl = selectMembersWidget.firstElementChild;
         let personIdRefsToRemove=[],personIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("removed")) {
@@ -94,6 +95,7 @@ mmm.v.updateArtist = {
         // update the selection list option element
         selectArtistEl.options[selectArtistEl.selectedIndex].text = slots.name;
         selectMembersWidget.innerHTML = "";
+
         formEl.reset();
     }
 };

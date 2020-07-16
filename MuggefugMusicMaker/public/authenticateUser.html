@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title> Muggefug Music Maker </title>
+
+    <!-- Firebase SDK snippet -->
+    <script src="/__/firebase/7.15.3/firebase-app.js"></script>
+    <script src="/__/firebase/7.15.3/firebase-firestore.js"></script>
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+    <!-- Initialize Firebase Authentication-->
+    <script src="/__/firebase/7.15.3/firebase-auth.js"></script>
+    <link href="css/main.css" rel="stylesheet">
+    <script src="src/c/initialize.js"></script>
+    <script src="src/v/authenticateUser.js"></script>
+    <script>
+        window.addEventListener("load", mmm.v.authenticateUser.setupLoginAndSignup);
+    </script>
+</head>
+<body>
+<form id="User">
+    <div><label for="txtEmail">Email:</label>
+        <br/>
+        <input id="txtEmail" name="txtEmail" type="email"/>
+    </div>
+    <div>
+        <label for="txtPassword">Password (6+ characters):</label>
+        <br/>
+        <input id="txtPassword" name="txtPassword" type="password"/>
+    </div>
+    <span>---</span>
+    <div>
+        <button id="btnLogin" name="login">Log in</button>
+        <button id="btnSignUp" name="signup">Sign Up</button>
+    </div>
+</form>
+</body>
+</html>

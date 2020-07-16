@@ -8,6 +8,8 @@ mmm.v.createArtist = {
         const saveButton = document.forms['createArtist'].commit;
         const formEl = document.forms['createArtist'];
         let categorySelectEl = formEl.category;
+
+        formEl.reset();
         // set an event handler for the submit/save button
         saveButton.addEventListener("click",
            this.handleSaveButtonClickEvent);

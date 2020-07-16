@@ -232,7 +232,6 @@ var util = {
     for (let i=0; i < keys.length; i++) {
       // if invoked with a selection argument, only add options for objects
       // that are not yet selected
-      console.log("BIN hier");
       if (!optPar || !optPar.selection || !optPar.selection[keys[i]]) {
         obj = selectionRange[keys[i]];
         if (optPar && optPar.displayProp) displayProp = optPar.displayProp;

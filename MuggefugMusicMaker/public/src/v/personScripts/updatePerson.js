@@ -19,6 +19,7 @@ mmm.v.updatePerson = {
             selectPersonEl.add( optionEl, null);
         }
 
+        formEl.reset();
         formEl.name.addEventListener("input", function () {
             formEl.name.setCustomValidity(
                 Person.checkName( formEl.name.value).message)});
