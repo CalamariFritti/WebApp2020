@@ -19,7 +19,7 @@ And by letting our concert-goers create the line-up on stage for their own conce
 MuggefugMusicMaker
 
 ### Domain
-www.MuggefugMusicMaker.de
+https://muggefugmusicmaker.web.app/index.html
 
 ## InformationManagemantTasks
 
