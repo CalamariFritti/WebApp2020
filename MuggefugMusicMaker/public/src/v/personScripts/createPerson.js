@@ -7,6 +7,8 @@ mmm.v.createPerson = {
     setupUserInterface:  function () {
         const saveButton = document.forms['createPerson'].commit;
         const formEl = document.forms['createPerson'];
+
+        formEl.reset();
         // set an event handler for the submit/save button
         saveButton.addEventListener("click",
             mmm.v.createPerson.handleSaveButtonClickEvent);

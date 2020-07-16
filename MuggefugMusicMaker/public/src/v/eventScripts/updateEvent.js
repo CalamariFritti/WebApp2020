@@ -21,7 +21,7 @@ mmm.v.updateEvent = {
             selectEventEl.add( optionEl, null);
         }
 
-
+        formEl.reset();
         formEl.name.addEventListener("input", function () {
             formEl.name.setCustomValidity(
                 Event.checkName( formEl.name.value).message)});
