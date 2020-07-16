@@ -46,7 +46,7 @@
             <h1>Muggefug Music Maker</h1>
         </div>
         <nav>
-            <ul>
+            <ul id = "main-menu">
                 <li><a href="events.html">Events</a></li>
                 <li><a href="artists.html">Artists</a></li>
                 <li><a href="persons.html">Persons</a></li>
@@ -61,11 +61,24 @@
         <section id="Person-M" class="UI-Page">
             <!-- ======================================================= -->
             <h1>Manage person data</h1>
-            <ul class="menu">
-                <li><button type="button" onclick="mmm.v.retrieveAndListAllPerson.setupUserInterface()">Retrieve and list all person records</button></li>
-                <li><button type="button" onclick="mmm.v.createPerson.setupUserInterface()">Create a new person record</button></li>
-                <li><button type="button" onclick="mmm.v.updatePerson.setupUserInterface()">Update a person record</button></li>
-                <li><button type="button" onclick="mmm.v.deletePerson.setupUserInterface()">Delete a person record</button></li>
+            <ul role="menubar" class="menu">
+                <li id="opt-create" role="menuitem" style="opacity: 0.4;">
+                    <span>Create a new person record</span>
+                    <button type="button" onclick="mmm.v.createPerson.setupUserInterface()" style="display: none">Create a new person record</button>
+                    <a onclick="mmm.v.createPerson.setupUserInterface()" >Create</a>
+                </li>
+                <li role="menuitem">
+                    <button type="button" onclick="mmm.v.retrieveAndListAllPerson.setupUserInterface()">Retrieve and list all person records</button>
+                </li>
+                <li id="opt-update" role="menuitem" style="opacity: 0.4;">
+                    <span>Update a person record</span>
+                    <button type="button" onclick="mmm.v.updatePerson.setupUserInterface()" style="display: none">Update a person record</button>
+                </li>
+                <li id="opt-delete" role="menuitem" style="opacity: 0.4;">
+                    <span>Delete a person record</span>
+                    <button type="button" onclick="mmm.v.deletePerson.setupUserInterface()" style="display: none">Delete a person record</button>
+                </li>
+
             </ul>
             <div class="button"><a href="index.html">Back to Main menu</a></div>
         </section>

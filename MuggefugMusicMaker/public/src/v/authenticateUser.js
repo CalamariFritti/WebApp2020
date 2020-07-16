@@ -21,17 +21,31 @@ mmm.v.authenticateUser = {
                     }
                     console.log('Navigating as anonymous');
                 } else { // if user is registered
-                    if (pageLocation === '/index.html' || pageLocation === '/') {
+
+                    if (pageLocation === '/artists.html' ||
+                        pageLocation === '/events.html' ||
+                        pageLocation === '/persons.html') {
+                        if (!user.emailVerified) {
+                            alert('Check your email ' + user.email +
+                                ' for instructions to verify this account before using this create/write operation');
+                            window.location.pathname = "/index.html";
+                        }
+
+
                         const menuItems = ["opt-create", "opt-update", "opt-delete"];
                         menuItems.forEach(rebuildMenu);
 
                         // build link menu options
                         function rebuildMenu(item) {
                             let menuItemEl = document.getElementById(item); // get menu item
+                            console.log(menuItemEl);
                             menuItemEl.style.opacity = "1";
                             menuItemEl.removeChild(menuItemEl.firstElementChild); // remove 'span' element
                             menuItemEl.firstElementChild.style.display = "inline"; // show 'a' element
                         }
+                    }
+
+                    if (pageLocation === '/index.html' || pageLocation === '/') {
 
                         // enable button menu options
                         let menuClearEl = document.getElementById("tool-clear"); // get menu item
@@ -40,15 +54,13 @@ mmm.v.authenticateUser = {
                         let menuGenerateEl = document.getElementById("tool-generate"); // get menu item
                         menuGenerateEl.style.opacity = "1";
                         menuGenerateEl.childNodes[0].nextElementSibling.disabled = false; // enable button
-                    } else if (pageLocation === '/artist.html' ||
-                        pageLocation === '/events.html' ||
-                        pageLocation === '/persons.html') {
-                        if (!user.emailVerified) {
-                            alert('Check your email ' + user.email +
-                                ' for instructions to verify this account before using this create/write operation');
-                            window.location.pathname = "/index.html";
-                        }
                     }
+
+                    const menuEL = document.getElementById("main-menu");
+                    const link = document.createElement("a");
+                    link.setAttribute("onclick","mmm.v.authenticateUser.handleSignOut()");
+                    link.innerText = "Logout";
+                    menuEL.appendChild(link);
                     console.log('Navigating as: ' + user.email +
                         ' (verified Account? ' + user.emailVerified + ')');
                 }
@@ -138,5 +150,17 @@ mmm.v.authenticateUser = {
             a.href = "authenticateUser.html";
             console.error(`${e.message}`);
         }
+    },
+    handleSignOut: async function() {
+
+        auth.signOut().then(function() {
+
+            alert('Successfully logged out');
+            window.location.pathname = "/index.html";
+        }).catch(function(error) {
+            // An error happened.
+            console.log("Error while logging out");
+        });
+
     }
 }

@@ -45,7 +45,7 @@
       <h1>Muggefug Music Maker</h1>
     </div>
     <nav>
-      <ul>
+      <ul id = "main-menu">
         <li><a href="events.html">Events</a></li>
         <li><a href="artists.html">Artists</a></li>
         <li><a href="persons.html">Persons</a></li>
@@ -60,12 +60,27 @@
   <section id="Event-M" class="UI-Page">
 <!-- ======================================================= -->
     <h1>Manage event data</h1>
-    <ul class="menu">
-      <li><button type="button" onclick="mmm.v.retrieveAndListAllEvents.setupUserInterface()">Retrieve and list all event records</button></li>
-      <li><button type="button" onclick="mmm.v.createEvent.setupUserInterface()">Create a new event record</button></li>
-      <li><button type="button" onclick="mmm.v.updateEvent.setupUserInterface()">Update a event record</button></li>
-      <li><button type="button" onclick="mmm.v.deleteEvent.setupUserInterface()">Delete a event record</button></li>
+    <ul role="menubar" class="menu">
+      <li id="opt-create" role="menuitem" style="opacity: 0.4;">
+        <span>Create a new book record</span>
+        <button type="button" onclick="mmm.v.createEvent.setupUserInterface()" style="display: none">Create a new event record</button>
+        <a onclick="mmm.v.createEvent.setupUserInterface()" >Create</a>
+      </li>
+      <li role="menuitem">
+        <button type="button" onclick="mmm.v.retrieveAndListAllEvents.setupUserInterface()">Retrieve and list all event records</button>
+      </li>
+      <li id="opt-update" role="menuitem" style="opacity: 0.4;">
+        <span>Update a event record</span>
+        <button type="button" onclick="mmm.v.updateEvent.setupUserInterface()" style="display: none">Update a event record</button>
+      </li>
+      <li id="opt-delete" role="menuitem" style="opacity: 0.4;">
+        <span>Delete a event record</span>
+        <button type="button" onclick="mmm.v.deleteEvent.setupUserInterface()" style="display: none">Delete a event record</button>
+      </li>
+
     </ul>
+    <p id="auth-invitation" style="display: none; border: dotted 1px black; padding: 1em; background: #feffea">Please
+      <a href="authenticateUser.html">Log in or Sign up</a> to use the <b>disabled</b> change/write operations.</p>
     <div class="button"><a href="index.html">Back to Main menu</a></div>
   </section>
 <!-- ======================================================= -->
