@@ -97,10 +97,13 @@ mmm.v.updateEvent = {
                 artistIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        await Event.update(slots,artistIdRefsToAdd,artistIdRefsToRemove);
-        // update the selection list option element
-        selectEventEl.options[selectEventEl.selectedIndex].text = slots.name;
-        selectLineUpWidget.innerHTML = "";
-        formEl.reset();
+        if (formEl.checkValidity()) {
+            await Event.update(slots,artistIdRefsToAdd,artistIdRefsToRemove);
+            // update the selection list option element
+            selectEventEl.options[selectEventEl.selectedIndex].text = slots.name;
+            selectLineUpWidget.innerHTML = "";
+            formEl.reset();
+        }
+
     }
 };
