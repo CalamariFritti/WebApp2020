@@ -66,6 +66,7 @@ mmm.v.createArtist = {
             await Artist.add(slots,personIdRefsToAdd);
             formEl.reset();
             selectMembersWidget.innerHTML = "";
+
         }
         // neutralize the submit event
         formEl.addEventListener("submit", function (e) {
@@ -74,8 +75,8 @@ mmm.v.createArtist = {
             selectMembersWidget.innerHTML = "";
         });
 
-        document.getElementById("Artist-M").style.display = "block";
-        document.getElementById("Artist-C").style.display = "none";
 
+        document.getElementById("Artist-M").style.display = "none";
+        document.getElementById("Artist-C").style.display = "block";
     }
 };

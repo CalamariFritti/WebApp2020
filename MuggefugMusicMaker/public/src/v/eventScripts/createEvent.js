@@ -79,8 +79,8 @@ mmm.v.createEvent = {
 
         });
 
-        document.getElementById("Event-M").style.display = "block";
-        document.getElementById("Event-C").style.display = "none";
+        document.getElementById("Event-M").style.display = "none";
+        document.getElementById("Event-C").style.display = "block";
 
     }
 };
