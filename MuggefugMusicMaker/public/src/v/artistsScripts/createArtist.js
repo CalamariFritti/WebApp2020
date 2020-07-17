@@ -45,7 +45,7 @@ mmm.v.createArtist = {
             artistID: formEl.artistID.value,
             name: formEl.name.value,
             contact: formEl.contact.value,
-            genre: parseInt(formEl.category.value)
+            genre: parseInt(parseInt(formEl.category.value)+1)
         };
         formEl.artistID.setCustomValidity(
             Artist.checkArtistIdAsId( formEl.artistID.value).message);
@@ -54,8 +54,8 @@ mmm.v.createArtist = {
             Artist.checkName( formEl.name.value).message);
 
 
-        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
-            multiChoiceListEl = selectMembersWidget.firstElementChild;
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        const multiChoiceListEl = selectMembersWidget.firstElementChild;
         let personIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("added")) {

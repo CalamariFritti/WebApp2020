@@ -7,8 +7,8 @@ Methodes for updating Persons
 mmm.v.updatePerson = {
     setupUserInterface: async function () {
         const formEl = document.forms['updatePerson'];
-        updateButton = formEl.commit,
-            selectPersonEl = formEl.selectPerson;
+        const updateButton = formEl.commit;
+        const selectPersonEl = formEl.selectPerson;
         selectPersonEl.innerHTML = "<option>---</option>";
         // load all Persons
         const persons = await Person.retrieveAll();

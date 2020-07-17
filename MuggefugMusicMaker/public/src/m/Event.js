@@ -136,7 +136,7 @@ class Event {
             console.log("Error retriving all Events: $(error) ");
         }
 
-    }
+    };
 
 
     // load a specifc Event from the firebase database
@@ -166,7 +166,7 @@ class Event {
             console.log("Error retriving a Event: " + error);
         }
 
-    }
+    };
     // add an Event to the database
     Event.add = async function(slots, artistIdRefsToAdd){
         await db.collection("Event").doc(slots.eventID).set(slots);
@@ -183,7 +183,7 @@ class Event {
 
         await Event.removeArtistsFromEvent(slots,artistsToRemove);
         await Event.addArtistsToEvent(slots,artistsToAdd);
-    }
+    };
 
     //delete an Event in the database
     Event.destroy = async function(eventID){
@@ -218,7 +218,7 @@ class Event {
             }
 
         }
-    }
+    };
 
     Event.retrieveEventArtistConnection = async function (slots) {
 
@@ -237,7 +237,7 @@ class Event {
             .catch(function(error) {
                 console.log("Error getting documents: ", error);
             });
-    }
+    };
     Event.addArtistsToEvent = async function (slots,artistsToAdd) {
         let vars = {};
         vars.eventID = slots.eventID;
@@ -248,7 +248,7 @@ class Event {
             console.log("Successfuly added an Event/Artist with ids " + slots.eventID+" and "+artistID);
         }
 
-    }
+    };
 
 
 

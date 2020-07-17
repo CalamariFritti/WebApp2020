@@ -58,8 +58,9 @@ mmm.v.createEvent = {
             formEl.eventDate.setCustomValidity(
                 Event.checkDate( formEl.eventDate.value).message);
 
-        selectMembersWidget = formEl.querySelector(".MultiChoiceWidget"),
-        multiChoiceListEl = selectMembersWidget.firstElementChild;
+        const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
+        const multiChoiceListEl = selectMembersWidget.firstElementChild;
+
         let artistIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("added")) {
@@ -74,6 +75,8 @@ mmm.v.createEvent = {
             selectMembersWidget.innerHTML = "";
         });
 
+        formEl.reset();
+        selectMembersWidget.innerHTML = "";
         document.getElementById("Event-M").style.display = "none";
         document.getElementById("Event-C").style.display = "block";
 

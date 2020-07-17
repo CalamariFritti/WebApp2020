@@ -37,4 +37,4 @@ mmm.v.deleteEvent = {
 
         }
     }
-}
+};
