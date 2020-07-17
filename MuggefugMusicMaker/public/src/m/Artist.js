@@ -68,6 +68,12 @@ class Artist {
     set members(value) {
         this._members = value;
     }
+
+    /**
+     * Checks if everything is correct with the name
+     * @param name string
+     * @returns ConstraintViolation
+     */
     static checkName(name) {
         if (name === undefined || name === "" || name === "\"\"") {
             return new MandatoryValueConstraintViolation("A name must be provided!");
@@ -77,6 +83,11 @@ class Artist {
             return new NoConstraintViolation();
         }
     }
+    /**
+     * Checks if everything is correct with the id
+     * @param id string|number
+     * @returns ConstraintViolation
+     */
     static checkArtistId(id) {
         if (id === undefined) {
             return new NoConstraintViolation();  // may be optional as an IdRef
@@ -90,6 +101,11 @@ class Artist {
             }
         }
     }
+    /**
+     * Checks if everything is correct with the id as id ref
+     * @param id string|number
+     * @returns ConstraintViolation
+     */
     static checkArtistIdAsId (id) {
 
         let constraintViolation = Artist.checkArtistId(id);
@@ -126,7 +142,7 @@ Artist.retrieveAll = async function(){
         console.log("Error retriving all Artists: $(error) ");
     }
 
-}
+};
 
 
 // load a specifc Artist from the firebase database
@@ -157,13 +173,13 @@ Artist.retrieve = async function(artistID){
         console.log("Error retriving a Artist: " + error);
     }
 
-}
+};
 // add an Artist to the database
 Artist.add = async function(slots,personIdRefsToAdd){
     await db.collection("Artist").doc(slots.artistID).set(slots);
     await Artist.addPersonsToArtist(slots,personIdRefsToAdd);
     console.log("Successfuly added an Artist named " + slots.name);
-}
+};
 
 // update an Artist in the database
 Artist.update = async function(slots,personsToAdd,personsToRemove){
@@ -173,7 +189,7 @@ Artist.update = async function(slots,personsToAdd,personsToRemove){
     }
     await Artist.removePersonsFromArtist(slots,personsToRemove);
     await Artist.addPersonsToArtist(slots,personsToAdd);
-}
+};
 
 //delete an Artist in the database
 Artist.destroy = async function(artistID){
@@ -193,9 +209,9 @@ Artist.destroy = async function(artistID){
             console.log("Successfuly deleted an Artist/Event connection with artistID " + artistID);
         });
     });
-}
+};
 
-
+// retrieves all artists by a given by an eventId
 Artist.retrieveArtistByEventId = async function(eventID) {
 
     db.collection("Artist").where("eventId", "==", eventID)
@@ -211,7 +227,7 @@ Artist.retrieveArtistByEventId = async function(eventID) {
         });
 };
 
-
+// removes all given persons from an artist
 Artist.removePersonsFromArtist = async function(slots,personsToRemove){
 
     for (let personID of personsToRemove) {
@@ -230,6 +246,7 @@ Artist.removePersonsFromArtist = async function(slots,personsToRemove){
     }
 };
 
+// retrives all connections between an artist and the persons
 Artist.retrieveArtistPersonConnection = async function (slots) {
 
     return  db.collection("ArtistAndPerson")
@@ -248,7 +265,9 @@ Artist.retrieveArtistPersonConnection = async function (slots) {
         .catch(function(error) {
             console.log("Error getting documents: ", error);
         });
-}
+};
+
+// connects a person to an artist in the database
 Artist.addPersonsToArtist = async function (slots,personsToAdd) {
     let vars = {};
     vars.artistID = slots.artistID;
@@ -259,7 +278,7 @@ Artist.addPersonsToArtist = async function (slots,personsToAdd) {
         console.log("Successfuly added an Artist/Person with ids " + slots.artistID+" and "+personID);
     }
 
-}
+};
 
 // Create test data
 Artist.generateTestData = function () {

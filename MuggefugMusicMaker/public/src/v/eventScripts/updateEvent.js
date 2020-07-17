@@ -7,13 +7,13 @@ Methodes for updating Events
 mmm.v.updateEvent = {
     setupUserInterface: async function () {
         const formEl = document.forms['updateEvent'];
-            updateButton = formEl.commit,
-            selectEventEl = formEl.selectEvent;
+        const updateButton = formEl.commit;
+        const selectEventEl = formEl.selectEvent;
         const selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget");
         selectLineUpWidget.innerHTML = "";
         // load all events
         const events = await Event.retrieveAll();
-        selectEventEl.innerHTML = "<option>---</option>"
+        selectEventEl.innerHTML = "<option>---</option>";
         for (let e of events) {
             let optionEl = document.createElement("option");
             optionEl.text = e.name;
@@ -86,8 +86,8 @@ mmm.v.updateEvent = {
             Event.checkDate( formEl.eventDate.value).message);
 
 
-        selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget"),
-        multiChoiceListEl = selectLineUpWidget.firstElementChild;
+        const selectLineUpWidget = formEl.querySelector(".MultiChoiceWidget");
+        const multiChoiceListEl = selectLineUpWidget.firstElementChild;
         let artistIdRefsToRemove=[],artistIdRefsToAdd =[];
         for (let mcListItemEl of multiChoiceListEl.children) {
             if (mcListItemEl.classList.contains("removed")) {

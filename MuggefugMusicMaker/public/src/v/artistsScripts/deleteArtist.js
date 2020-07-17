@@ -38,4 +38,4 @@ mmm.v.deleteArtist = {
 
         }
     }
-}
+};

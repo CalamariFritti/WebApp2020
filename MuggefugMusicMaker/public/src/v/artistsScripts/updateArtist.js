@@ -7,8 +7,8 @@ Methodes for updating Artists
 mmm.v.updateArtist = {
     setupUserInterface: async function () {
         const formEl = document.forms['updateArtist'];
-            updateButton = formEl.commit,
-            selectArtistEl = formEl.selectArtist;
+        const updateButton = formEl.commit;
+        const selectArtistEl = formEl.selectArtist;
         let categorySelectEl = formEl.category;
         const selectMembersWidget = formEl.querySelector(".MultiChoiceWidget");
         selectMembersWidget.innerHTML = "";
