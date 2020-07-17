@@ -39,7 +39,10 @@ mmm.v.createPerson = {
 
 
         //add the Person to the database
-        if (formEl.checkValidity()) await Person.add( slots);
+        if (formEl.checkValidity()) {
+            await Person.add( slots);
+            formEl.reset();
+        }
         // neutralize the submit event
         formEl.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -49,4 +52,4 @@ mmm.v.createPerson = {
         document.getElementById("Person-C").style.display = "block";
 
     }
-}
+};
