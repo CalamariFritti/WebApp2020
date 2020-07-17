@@ -91,11 +91,14 @@ mmm.v.updateArtist = {
                 personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        await Artist.update(slots,personIdRefsToAdd,personIdRefsToRemove);
-        // update the selection list option element
-        selectArtistEl.options[selectArtistEl.selectedIndex].text = slots.name;
-        selectMembersWidget.innerHTML = "";
+        if (formEl.checkValidity()) {
+            await Artist.update(slots,personIdRefsToAdd,personIdRefsToRemove);
+            // update the selection list option element
+            selectArtistEl.options[selectArtistEl.selectedIndex].text = slots.name;
+            selectMembersWidget.innerHTML = "";
 
-        formEl.reset();
+            formEl.reset();
+        }
+
     }
 };

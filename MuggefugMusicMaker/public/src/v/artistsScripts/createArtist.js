@@ -62,7 +62,11 @@ mmm.v.createArtist = {
                 personIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        if (formEl.checkValidity()) await Artist.add(slots,personIdRefsToAdd);
+        if (formEl.checkValidity()) {
+            await Artist.add(slots,personIdRefsToAdd);
+            formEl.reset();
+            selectMembersWidget.innerHTML = "";
+        }
         // neutralize the submit event
         formEl.addEventListener("submit", function (e) {
             e.preventDefault();
@@ -70,8 +74,8 @@ mmm.v.createArtist = {
             selectMembersWidget.innerHTML = "";
         });
 
-        document.getElementById("Artist-M").style.display = "none";
-        document.getElementById("Artist-C").style.display = "block";
-        formEl.reset();
+        document.getElementById("Artist-M").style.display = "block";
+        document.getElementById("Artist-C").style.display = "none";
+
     }
 };

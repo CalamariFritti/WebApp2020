@@ -67,18 +67,20 @@ mmm.v.createEvent = {
                 artistIdRefsToAdd.push( mcListItemEl.getAttribute("data-value"));
             }
         }
-        if (formEl.checkValidity()) await  await Event.add(slots,artistIdRefsToAdd);
+        if (formEl.checkValidity()) {
+            await Event.add(slots,artistIdRefsToAdd);
+            formEl.reset();
+            selectMembersWidget.innerHTML = "";
+        }
         // neutralize the submit event
         formEl.addEventListener("submit", function (e) {
             e.preventDefault();
             formEl.reset();
-            selectMembersWidget.innerHTML = "";
+
         });
 
-        formEl.reset();
-        selectMembersWidget.innerHTML = "";
-        document.getElementById("Event-M").style.display = "none";
-        document.getElementById("Event-C").style.display = "block";
+        document.getElementById("Event-M").style.display = "block";
+        document.getElementById("Event-C").style.display = "none";
 
     }
 };
